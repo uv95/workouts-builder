@@ -1,182 +1,95 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Muscle from './Muscle';
+import BodyPart from './BodyPart';
 
 function Categories() {
+  const myRef = useRef();
+  // useEffect(() => {
+  //   console.log(myRef.current.checked);
+  // }, []);
+
+  const click = () => {
+    console.log(myRef.current.childNodes[0]);
+    // console.log(myRef.current.value);
+  };
+
   return (
     <div className="mt-32 w-3/4 flex justify-between">
       <div>
         <p className="text-3xl mb-8 font-bold">Body part</p>
-        <div class="form-control w-64">
-          <div class="collapse collapse-arrow">
-            <input type="checkbox" />
-            <div class="collapse-title py-0 flex items-center text-2xl">
-              Abs
-            </div>
-            <div class="collapse-content ">
-              <label class="label cursor-pointer flex justify-start gap-6 ">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Upper</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Lower</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Obliques</span>
-              </label>
-            </div>
-          </div>
+        <button onClick={click} className="btn">
+          click
+        </button>
+        <div ref={myRef} className="form-control w-64">
+          <BodyPart name="Abs">
+            <Muscle muscle="Upper" />
+            <Muscle muscle="Lower" />
+            <Muscle muscle="Obliques" />
+          </BodyPart>
 
-          <div class="collapse collapse-arrow">
-            <input type="checkbox" />
-            <div class="collapse-title py-0 flex items-center text-2xl">
-              Arms
-            </div>
-            <div class="collapse-content">
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Biceps</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Triceps</span>
-              </label>
-            </div>
-          </div>
+          <BodyPart name="Arms">
+            <Muscle muscle="Biceps" />
+            <Muscle muscle="Triceps" />
+          </BodyPart>
 
-          <div class="collapse collapse-arrow ">
-            <input type="checkbox" />
-            <div class="collapse-title py-0 flex items-center text-2xl">
-              Back
-            </div>
-            <div class="collapse-content">
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Upper</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Middle</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Lower</span>
-              </label>
-            </div>
-          </div>
+          <BodyPart name="Back">
+            <Muscle muscle="Upper" />
+            <Muscle muscle="Middle" />
+            <Muscle muscle="Lower" />
+          </BodyPart>
 
-          <div class="collapse collapse-arrow ">
-            <input type="checkbox" />
-            <div class="collapse-title py-0 flex items-center text-2xl">
-              Glute
-            </div>
-            <div class="collapse-content w-64">
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Maximus</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Medius</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Minimus</span>
-              </label>
-            </div>
-          </div>
+          <BodyPart name="Glutes">
+            <Muscle muscle="Maximus" />
+            <Muscle muscle="Medius" />
+            <Muscle muscle="Minimus" />
+          </BodyPart>
 
-          <div class="collapse collapse-arrow ">
-            <input type="checkbox" />
-            <div class="collapse-title py-0 flex items-center text-2xl">
-              Chest
-            </div>
-            <div class="collapse-content">
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Upper</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Middle</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Lower</span>
-              </label>
-            </div>
-          </div>
+          <BodyPart name="Chest">
+            <Muscle muscle="Upper" />
+            <Muscle muscle="Middle" />
+            <Muscle muscle="Lower" />
+          </BodyPart>
 
-          <div class="collapse collapse-arrow ">
-            <input type="checkbox" />
-            <div class="collapse-title py-0 flex items-center text-2xl">
-              Legs
-            </div>
-            <div class="collapse-content">
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Quadriceps</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Hamstrings</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Calves</span>
-              </label>
-            </div>
-          </div>
+          <BodyPart name="Legs">
+            <Muscle muscle="Quadriceps" />
+            <Muscle muscle="Hamstrings" />
+            <Muscle muscle="Calves" />
+          </BodyPart>
 
-          <div class="collapse collapse-arrow ">
-            <input type="checkbox" />
-            <div class="collapse-title py-0 flex items-center text-2xl">
-              Shoulders
-            </div>
-            <div class="collapse-content ">
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Anterior delts</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Lateral delts</span>
-              </label>
-              <label class="label cursor-pointer flex justify-start gap-6">
-                <input type="checkbox" class="checkbox checkbox-sm" />
-                <span class="label-text text-xl">Rear delts</span>
-              </label>
-            </div>
-          </div>
+          <BodyPart name="Shoulders">
+            <Muscle muscle="Anterior delts" />
+            <Muscle muscle="Lateral delts" />
+            <Muscle muscle="Rear delts" />
+          </BodyPart>
         </div>
       </div>
       <div>
         <p className="text-3xl mb-8 font-bold">Equipment</p>
-        <div class="form-control">
-          <label class="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" class="checkbox" />
-            <span class="label-text text-2xl">Barbell</span>
+        <div className="form-control">
+          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
+            <input type="checkbox" className="checkbox" />
+            <span className="label-text text-2xl">Barbell</span>
           </label>
-          <label class="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" class="checkbox" />
-            <span class="label-text text-2xl">Dumbbells</span>
+          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
+            <input type="checkbox" className="checkbox" />
+            <span className="label-text text-2xl">Dumbbells</span>
           </label>
-          <label class="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" class="checkbox" />
-            <span class="label-text text-2xl">Weight machines</span>
+          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
+            <input type="checkbox" className="checkbox" />
+            <span className="label-text text-2xl">Weight machines</span>
           </label>
-          <label class="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" class="checkbox" />
-            <span class="label-text text-2xl">Bench</span>
+          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
+            <input type="checkbox" className="checkbox" />
+            <span className="label-text text-2xl">Bench</span>
           </label>
-          <label class="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" class="checkbox" />
-            <span class="label-text text-2xl">Resistance bands/Cables</span>
+          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
+            <input type="checkbox" className="checkbox" />
+            <span className="label-text text-2xl">Resistance bands/Cables</span>
           </label>
-          <label class="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" class="checkbox" />
-            <span class="label-text text-2xl">No equipment</span>
+          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
+            <input type="checkbox" className="checkbox" />
+            <span className="label-text text-2xl">No equipment</span>
           </label>
         </div>
         <Link

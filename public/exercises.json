@@ -1,0 +1,206 @@
+{
+  "abs": {
+    "upper": {
+      "barbell": [],
+      "dumbbell": [
+        {
+          "name": "Dumbbell crunch",
+          "description": "Lie on your back, holding a dumbbell or weight plate across your chest in both hands. Raise your torso, then lower it, maintaining tension in your uppers abs throughout.",
+          "image": "dumbbell_crunch.jpg"
+        }
+      ],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": [
+        {
+          "name": "Tuck and crunch",
+          "description": "Lie down with your hands by your head and your legs raised with your knees bent at a 90° angle. Simultaneously raise your torso and draw your knees towards your chest. Keep your fingers by your temples throughout and initiate each rep smoothly without jerking your torso up. Don't let your feet touch the floor between reps.",
+          "image": ""
+        }
+      ]
+    },
+    "lower": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [
+        {
+          "name": "Hanging knee raise",
+          "description": "Start in a dead hang and raise your knees powerfully to activate more of the muscle fibres in the lower abs. Lower back to the start under control to prevent swinging.",
+          "image": ""
+        }
+      ],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "obliques": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [
+        {
+          "name": "Decline plank with foot touch",
+          "description": "Get into a decline plank position, supporting yourself on your forearms with your feet raised on a bench. Your body should form a straight line from heels to head and the aim is to maintain that position throughout the exercise. Lift one foot off the bench and move it to the side to touch the floor, then return it to the bench. Continue, alternating sides.",
+          "image": ""
+        }
+      ],
+      "band": [],
+      "none": [
+        {
+          "name": "Bicycle crunches",
+          "description": "Lie on your back with your hands by your temples and your legs raised with your knees bent at a 90° angle. Bring your right knee up towards your chest while raising your torso and twisting so your left elbow comes to meet your knee. Then lower and do the same on the opposite side. Keep your shoulders and feet off the ground to force your abs to work hard to stabilise your torso.",
+          "image": ""
+        }
+      ]
+    }
+  },
+  "arms": {
+    "biceps": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "triceps": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    }
+  },
+  "back": {
+    "upper": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "middle": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "lower": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    }
+  },
+  "glutes": {
+    "maximus": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "medius": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "minimus": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    }
+  },
+  "chest": {
+    "upper": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "middle": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "lower": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    }
+  },
+  "legs": {
+    "quadriceps": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "hamstrings": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "calves": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    }
+  },
+  "shoulders": {
+    "anterior_delts": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "lateral_delts": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    },
+    "rear_delts": {
+      "barbell": [],
+      "dumbbell": [],
+      "weight_machine": [],
+      "bench": [],
+      "band": [],
+      "none": []
+    }
+  }
+}

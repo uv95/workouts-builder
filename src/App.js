@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Categories from './components/Categories';
 import Login from './components/Login';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import SearchResults from './components/SearchResults';
 
 function App() {
   return (
@@ -15,6 +16,10 @@ function App() {
             <Route path="/" element={<Hero />} />
             <Route path="/categories" element={<Categories />} />
             <Route path="/login" element={<Login />} />
+            <Route
+              path="/categories/selected_categories"
+              element={<SearchResults />}
+            />
           </Routes>
         </main>
       </div>
