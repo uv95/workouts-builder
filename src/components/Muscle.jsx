@@ -6,7 +6,7 @@ function Muscle({ muscle }) {
       <input
         type="checkbox"
         className="checkbox checkbox-sm"
-        value={muscle.toLowerCase()}
+        value={muscle.toLowerCase().replace(' ', '_')}
       />
       <span className="label-text text-xl">{muscle}</span>
     </label>

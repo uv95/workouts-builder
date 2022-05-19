@@ -1,27 +1,49 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Muscle from './Muscle';
 import BodyPart from './BodyPart';
+import Equipment from './Equipment';
+import ExercisesContext from '../context/ExercisesContext';
 
 function Categories() {
-  const myRef = useRef();
-  // useEffect(() => {
-  //   console.log(myRef.current.checked);
-  // }, []);
+  const { fetchExercises } = useContext(ExercisesContext);
+
+  const musclesRef = useRef();
+  const equipRef = useRef();
 
   const click = () => {
-    console.log(myRef.current.childNodes[0]);
-    // console.log(myRef.current.value);
+    const arr = Array.from(musclesRef.current.getElementsByTagName('input'));
+    const arr2 = Array.from(equipRef.current.getElementsByTagName('input'));
+
+    const chosenMuscles = [
+      ...new Set(
+        arr
+          .filter((el) => el.checked && el.classList.contains('checkbox'))
+          .map((el) => el.value)
+      ),
+    ];
+
+    const chosenBodyParts = [
+      ...new Set(
+        arr
+          .filter((el) => el.checked && el.classList.contains('checkbox'))
+          .map((el) => el.parentElement.parentElement.dataset.name)
+      ),
+    ];
+
+    const chosenEquipment = arr2
+      .filter((el) => el.checked)
+      .map((el) => el.value);
+
+    fetchExercises(chosenBodyParts, chosenMuscles, chosenEquipment);
   };
 
   return (
     <div className="mt-32 w-3/4 flex justify-between">
       <div>
         <p className="text-3xl mb-8 font-bold">Body part</p>
-        <button onClick={click} className="btn">
-          click
-        </button>
-        <div ref={myRef} className="form-control w-64">
+
+        <div ref={musclesRef} className="form-control w-64">
           <BodyPart name="Abs">
             <Muscle muscle="Upper" />
             <Muscle muscle="Lower" />
@@ -64,35 +86,19 @@ function Categories() {
           </BodyPart>
         </div>
       </div>
+
       <div>
         <p className="text-3xl mb-8 font-bold">Equipment</p>
-        <div className="form-control">
-          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" className="checkbox" />
-            <span className="label-text text-2xl">Barbell</span>
-          </label>
-          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" className="checkbox" />
-            <span className="label-text text-2xl">Dumbbells</span>
-          </label>
-          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" className="checkbox" />
-            <span className="label-text text-2xl">Weight machines</span>
-          </label>
-          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" className="checkbox" />
-            <span className="label-text text-2xl">Bench</span>
-          </label>
-          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" className="checkbox" />
-            <span className="label-text text-2xl">Resistance bands/Cables</span>
-          </label>
-          <label className="label cursor-pointer flex justify-start gap-6 mb-3">
-            <input type="checkbox" className="checkbox" />
-            <span className="label-text text-2xl">No equipment</span>
-          </label>
+        <div ref={equipRef} className="form-control">
+          <Equipment name="Barbell" />
+          <Equipment name="Dumbbell" />
+          <Equipment name="Weight machine" />
+          <Equipment name="Bench" />
+          <Equipment name="Resistance bands" />
+          <Equipment name="No equipment" />
         </div>
         <Link
+          onClick={click}
           to="/categories/selected_categories"
           className="btn btn-secondary w-52 mt-24"
         >

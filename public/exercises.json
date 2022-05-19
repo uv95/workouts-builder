@@ -6,17 +6,17 @@
         {
           "name": "Dumbbell crunch",
           "description": "Lie on your back, holding a dumbbell or weight plate across your chest in both hands. Raise your torso, then lower it, maintaining tension in your uppers abs throughout.",
-          "image": "dumbbell_crunch.jpg"
+          "image": "https://cdn.muscleandstrength.com/sites/default/files/weighted-crunch.jpg"
         }
       ],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": [
+      "resistance_band": [],
+      "no_equipment": [
         {
           "name": "Tuck and crunch",
           "description": "Lie down with your hands by your head and your legs raised with your knees bent at a 90° angle. Simultaneously raise your torso and draw your knees towards your chest. Keep your fingers by your temples throughout and initiate each rep smoothly without jerking your torso up. Don't let your feet touch the floor between reps.",
-          "image": ""
+          "image": "https://atletiq.com/content/exercises/444/female_2.jpg"
         }
       ]
     },
@@ -27,12 +27,14 @@
         {
           "name": "Hanging knee raise",
           "description": "Start in a dead hang and raise your knees powerfully to activate more of the muscle fibres in the lower abs. Lower back to the start under control to prevent swinging.",
-          "image": ""
+          "image": "https://cdn.mos.cms.futurecdn.net/Qkra87XuGik3vvPbWMtFXb.jpg",
+          "muscle": "Abs",
+          "equipment": "Weight Machine"
         }
       ],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "obliques": {
       "barbell": [],
@@ -40,37 +42,43 @@
       "weight_machine": [],
       "bench": [
         {
-          "name": "Decline plank with foot touch",
+          "name": "Decline plank with feet touch",
           "description": "Get into a decline plank position, supporting yourself on your forearms with your feet raised on a bench. Your body should form a straight line from heels to head and the aim is to maintain that position throughout the exercise. Lift one foot off the bench and move it to the side to touch the floor, then return it to the bench. Continue, alternating sides.",
-          "image": ""
+          "image": "https://www.getstrong.fit/images/decline%20plank.jpg"
         }
       ],
-      "band": [],
-      "none": [
+      "resistance_band": [],
+      "no_equipment": [
         {
           "name": "Bicycle crunches",
           "description": "Lie on your back with your hands by your temples and your legs raised with your knees bent at a 90° angle. Bring your right knee up towards your chest while raising your torso and twisting so your left elbow comes to meet your knee. Then lower and do the same on the opposite side. Keep your shoulders and feet off the ground to force your abs to work hard to stabilise your torso.",
-          "image": ""
+          "image": "https://images.squarespace-cdn.com/content/v1/585b5da2b8a79bc5100edbe1/1484377347038-1YHE8IVX0ZFCVQJ1I55T/Bicycle3.JPG"
         }
       ]
     }
   },
   "arms": {
     "biceps": {
-      "barbell": [],
+      "barbell": [
+        {
+          "name": "Bicep curl",
+          "description": "Hold the barbell with both hands facing up so the wrists, elbows, and shoulders are in a straight line about shoulder-width apart. Lift the barbell toward the shoulders while bending the elbows and keeping them next to the middle of the body. Slowly lower the weight to return to the starting position. Keep chest still, using just the arms for the movement.",
+          "image": "https://cdn.mos.cms.futurecdn.net/3jhSDeGBs7mETrDAyaLcUg.jpg"
+        }
+      ],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "triceps": {
       "barbell": [],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     }
   },
   "back": {
@@ -79,24 +87,24 @@
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "middle": {
       "barbell": [],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "lower": {
       "barbell": [],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     }
   },
   "glutes": {
@@ -105,24 +113,24 @@
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "medius": {
       "barbell": [],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "minimus": {
       "barbell": [],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     }
   },
   "chest": {
@@ -131,24 +139,24 @@
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "middle": {
       "barbell": [],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "lower": {
       "barbell": [],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     }
   },
   "legs": {
@@ -157,24 +165,24 @@
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "hamstrings": {
       "barbell": [],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "calves": {
       "barbell": [],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     }
   },
   "shoulders": {
@@ -183,24 +191,24 @@
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "lateral_delts": {
       "barbell": [],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     },
     "rear_delts": {
       "barbell": [],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
-      "band": [],
-      "none": []
+      "resistance_band": [],
+      "no_equipment": []
     }
   }
 }
