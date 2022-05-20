@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Hero from './components/Hero';
 import Navbar from './components/Navbar';
 import Categories from './components/Categories';
 import Login from './components/Login';
+import Exercise from './components/Exercise';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SearchResults from './components/SearchResults';
 import { ExercisesProvider } from './context/ExercisesContext';
@@ -21,6 +22,10 @@ function App() {
               <Route
                 path="/categories/selected_categories"
                 element={<SearchResults />}
+              />
+              <Route
+                path={`/categories/selected_categories/:link`}
+                element={<Exercise />}
               />
             </Routes>
           </main>

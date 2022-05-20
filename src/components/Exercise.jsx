@@ -1,37 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+import ExercisesContext from '../context/ExercisesContext';
 
 function Exercise() {
-  const [image, setImage] = useState('');
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-
-  const fetchExercise = async () => {
-    const res = await fetch('../exercises.json', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify(),
-    });
-    const data = await res.json();
-    setImage(data.abs.upper.dumbbell[0].image);
-    setName(data.abs.upper.dumbbell[0].name);
-    setDescription(data.abs.upper.dumbbell[0].description);
-  };
-
-  useEffect(() => {
-    fetchExercise();
-  });
+  const { searchResults } = useContext(ExercisesContext);
 
   return (
-    <div className="card w-60 h-80 bg-base-100 shadow-xl">
-      <figure>
-        <img src={image} alt="dumbbell_crunch" />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">{name}</h2>
-        <p>{description}</p>
-      </div>
+    <div className="mt-40 text-xl">
+      {searchResults.map((ex) => {
+        if (
+          ex.name.replaceAll(' ', '_').toLowerCase() ===
+          window.location.href.slice(window.location.href.lastIndexOf('/') + 1)
+        ) {
+          return (
+            <div className="flex gap-16">
+              <img
+                className="w-2/5 h-fit rounded-lg"
+                src={ex.image}
+                alt={ex.name}
+              />
+              <div>
+                <h2 className="font-bold text-3xl mb-6">{ex.name}</h2>
+                <div className="mb-6">
+                  <p>
+                    Muscle: <span className="font-bold">{ex.muscle}</span>
+                  </p>
+                  <p>
+                    Equipment: <span className="font-bold">{ex.equipment}</span>
+                  </p>
+                </div>
+                <p>{ex.description}</p>
+              </div>
+            </div>
+          );
+        }
+      })}
     </div>
   );
 }

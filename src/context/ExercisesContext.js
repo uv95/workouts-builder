@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState } from 'react';
 
 const ExercisesContext = createContext();
 
@@ -30,8 +30,8 @@ export const ExercisesProvider = ({ children }) => {
                 j
               ]
                 .slice(1)
-                .replace('_', ' ')}`;
-              //   console.log(exercise);
+                .replaceAll('_', ' ')}`;
+
               exercisesList.push(exercise);
             }
           }
