@@ -8,10 +8,10 @@ function Navbar() {
         TEST LOGO
       </Link>
       <div className="flex gap-6">
-        <Link to="/categories" className="btn btn-secondary w-52">
-          Exercises Collection
+        <Link to="/exercises" className="btn btn-secondary w-40">
+          Exercises
         </Link>
-        <Link to="/login" className="btn btn-primary w-52">
+        <Link to="/login" className="btn btn-primary w-40">
           Log In
         </Link>
       </div>

@@ -74,24 +74,53 @@
     },
     "triceps": {
       "barbell": [],
-      "dumbbell": [],
+      "dumbbell": [
+        {
+          "name": "Overhead trcieps extension",
+          "description": "Start standing with your feet shoulder width apart and dumbbells held in front of you. Raise the dumbbells above your head until your arms are stretched out straight. Slowly lower the weights back behind your head, being careful not to flare your elbows out too much. Once your forearms move beyond parallel to the floor bring the weight back up to the starting position. Your upper arms should remain in place throughout the movement.",
+          "image": "https://www.muscleandfitness.com/wp-content/uploads/2018/08/1109-overhead-two-arm-triceps-extension.jpg?quality=86&strip=all"
+        }
+      ],
       "weight_machine": [],
       "bench": [],
       "resistance_band": [],
-      "no_equipment": []
+      "no_equipment": [
+        {
+          "name": "Bent-knee push-up",
+          "description": "Place your hands at chest height, shoulder-width apart, on the ground. Keep your fingers pointing forward, and position yourself either on your knees or on your toes. Bend your elbows out to the side, lowering your upper body. Squeeze your chest as you push back up (be sure not to lock your elbows at the top). Keep your torso, including your lower back and abs, in line with your upper body--don't let your middle sag.",
+          "image": "https://post.greatist.com/wp-content/uploads/sites/2/2020/06/GRT-Pushup-Knee-Female-Steps-1200x628-Facebook.jpg"
+        }
+      ]
     }
   },
   "back": {
     "upper": {
       "barbell": [],
-      "dumbbell": [],
+      "dumbbell": [
+        {
+          "name": "Dumbbell row",
+          "description": "Stand holding a pair of dumbbells with your knees slightly bent. Bend over at your waist until your torso is between parallel with and 45 degrees to the floor, and start with the dumbbells hanging straight down toward the floor, palms facing each other and your arms extended. Maintaining the same torso angle, pull the dumbbells up in unison until they reach waist height. Squeeze your shoulder blades together to achieve full contraction in the back muscles, then lower the weights to the start position.",
+          "image": "https://cdn.muscleandstrength.com/sites/default/files/bent-over-dumbbell-row-1.jpg"
+        },
+        {
+          "name": "One-arm dumbbell row",
+          "description": "Place one bent knee and same-side hand on a bench with the opposite foot on the floor and that hand holding a dumbbell. Begin bent over at the waist with your back level with the floor, your head pointed down and the dumbbell hanging straight toward the floor with your arm extended, palm facing in. Keeping your chest pointed to the floor, pull the dumbbell up to your waist by contracting your back muscles and bending your elbow. When it reaches the top, squeeze your shoulder blades together, then slowly lower the dumbbell to the start position. Complete all reps with one arm, then switch arms. ",
+          "image": "https://cdn.mos.cms.futurecdn.net/rKjNSasAgRKvcV69Fhg4mU-1200-80.jpg"
+        }
+      ],
       "weight_machine": [],
       "bench": [],
       "resistance_band": [],
       "no_equipment": []
     },
     "middle": {
-      "barbell": [],
+      "barbell": [
+        {
+          "name": "Barbell row",
+          "description": "Stand holding a barbell with a shoulder-width, overhand grip and your knees slightly bent. Bend over at your waist until your torso is between parallel with and 45 degrees to the floor. Start with the bar hanging straight down toward the floor and your arms extended. Bend your elbows and contract your back muscles to pull the bar up to your stomach, keeping your torso in the same position throughout. Squeeze the contraction at the top, then slowly lower the bar back to the arms extended position.",
+          "image": "https://www.muscleandfitness.com/wp-content/uploads/2018/07/1109-stronger-back.jpg?quality=86&strip=all"
+        }
+      ],
       "dumbbell": [],
       "weight_machine": [],
       "bench": [],
@@ -101,7 +130,13 @@
     "lower": {
       "barbell": [],
       "dumbbell": [],
-      "weight_machine": [],
+      "weight_machine": [
+        {
+          "name": "Neutral grip pull-up",
+          "description": "Grabbing the parallel pull-up bar, start by hanging freely with your arms extended. This will be your starting position. Keep your head up, core tight, breath outward and pull yourself upwards by flexing the elbows and make sure to keep your elbows from flailing outward. Bring your chin to at least the height of the bar, pause for a second, inhale, then lower back to the starting position. Repeat as many as you can while maintaining good form and aim for at least two to three sets to build strength and muscle to your lats, biceps, forearms, and traps.",
+          "image": "https://www.ammfitness.co.uk/information-advice/wp-content/uploads/2019/11/Neutral-Grip-Pull-Up.jpg"
+        }
+      ],
       "bench": [],
       "resistance_band": [],
       "no_equipment": []

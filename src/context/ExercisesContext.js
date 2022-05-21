@@ -4,6 +4,11 @@ const ExercisesContext = createContext();
 
 export const ExercisesProvider = ({ children }) => {
   const [searchResults, setSearchResults] = useState([]);
+  const [exerciseName, setExerciseName] = useState('');
+
+  const getExerciseName = (name) => {
+    setExerciseName(name);
+  };
 
   const fetchExercises = async (bodyPart, muscle, equipment) => {
     const res = await fetch('../exercises.json', {
@@ -46,6 +51,8 @@ export const ExercisesProvider = ({ children }) => {
       value={{
         fetchExercises,
         searchResults,
+        exerciseName,
+        getExerciseName,
       }}
     >
       {children}
