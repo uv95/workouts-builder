@@ -1,10 +1,10 @@
 import React, { useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Muscle from './Muscle';
-import BodyPart from './BodyPart';
-import Equipment from './Equipment';
+import Muscle from '../components/Muscle';
+import BodyPart from '../components/BodyPart';
+import Equipment from '../components/Equipment';
 import ExercisesContext from '../context/ExercisesContext';
-import Breadcrumbs from './Breadcrumbs';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 function Exercises() {
   const { fetchExercises } = useContext(ExercisesContext);

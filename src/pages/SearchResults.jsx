@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
 import ExercisesContext from '../context/ExercisesContext';
-import { Link } from 'react-router-dom';
-import Breadcrumbs from './Breadcrumbs';
-import Pagination from './Pagination';
+import { Link, useNavigate } from 'react-router-dom';
+import Breadcrumbs from '../components/Breadcrumbs';
+import Pagination from '../components/Pagination';
 
 function SearchResults() {
   const { searchResults } = useContext(ExercisesContext);
+  const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [exercisesPerPage] = useState(8);
@@ -27,36 +28,38 @@ function SearchResults() {
       <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-4 sm:grid-cols-2 gap-20 gap-y-10">
         {currentExercises.map((ex, index) => {
           return (
-            <Link
+            <div
+              onClick={() =>
+                navigate(
+                  `/exercises/selected/${ex.name
+                    .replaceAll(' ', '_')
+                    .toLowerCase()}`
+                )
+              }
               key={index}
-              to={`/exercises/selected/${ex.name
-                .replaceAll(' ', '_')
-                .toLowerCase()}`}
+              className="card w-60 h-80 bg-base-100 shadow-xl cursor-pointer"
             >
-              <div className="card w-60 h-80 bg-base-100 shadow-xl">
-                <figure className="w-full h-3/5 bg-blue-300">
-                  <img
-                    className="object-cover w-full h-full"
-                    src={ex.image}
-                    alt={ex.name}
-                  />
-                </figure>
-                <div className="card-body h-3/5 p-0 mx-4 ">
-                  <h2 className="card-title h-1/4 mt-5 flex items-start">
-                    {ex.name}
-                  </h2>
-                  <div className="mt-4">
-                    <p>
-                      Muscle: <span className="font-bold">{ex.muscle}</span>
-                    </p>
-                    <p>
-                      Equipment:{' '}
-                      <span className="font-bold">{ex.equipment}</span>
-                    </p>
-                  </div>
+              <figure className="w-full h-3/5 bg-blue-300">
+                <img
+                  className="object-cover w-full h-full"
+                  src={ex.image}
+                  alt={ex.name}
+                />
+              </figure>
+              <div className="card-body h-3/5 p-0 mx-4 ">
+                <h2 className="card-title h-1/4 mt-5 flex items-start">
+                  {ex.name}
+                </h2>
+                <div className="mt-4">
+                  <p>
+                    Muscle: <span className="font-bold">{ex.muscle}</span>
+                  </p>
+                  <p>
+                    Equipment: <span className="font-bold">{ex.equipment}</span>
+                  </p>
                 </div>
               </div>
-            </Link>
+            </div>
           );
         })}
       </div>

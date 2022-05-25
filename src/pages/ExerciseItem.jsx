@@ -1,30 +1,31 @@
 import React, { useContext, useEffect } from 'react';
 import ExercisesContext from '../context/ExercisesContext';
-import Breadcrumbs from './Breadcrumbs';
+import Breadcrumbs from '../components/Breadcrumbs';
+import { useLocation } from 'react-router-dom';
 
 function ExerciseItem() {
   const { searchResults, getExerciseName } = useContext(ExercisesContext);
+  const location = useLocation();
+
+  const exName = location.pathname.slice(
+    location.pathname.lastIndexOf('/') + 1
+  );
 
   useEffect(() => {
-    const name = window.location.href.slice(
-      window.location.href.lastIndexOf('/') + 1
-    );
     getExerciseName(
-      (name.split(' ')[0][0].toUpperCase() + name.slice(1)).replaceAll('_', ' ')
+      (exName.split(' ')[0][0].toUpperCase() + exName.slice(1)).replaceAll(
+        '_',
+        ' '
+      )
     );
   }, []);
 
   return (
     <>
-      <Breadcrumbs link={window.location.pathname} index={-1} />
+      <Breadcrumbs link={location.pathname} index={-1} />
       <div className="mt-4 text-xl">
         {searchResults.map((ex, i) => {
-          if (
-            ex.name.replaceAll(' ', '_').toLowerCase() ===
-            window.location.href.slice(
-              window.location.href.lastIndexOf('/') + 1
-            )
-          ) {
+          if (ex.name.replaceAll(' ', '_').toLowerCase() === exName) {
             return (
               <div key={i} className="flex gap-16 mx-10">
                 <img

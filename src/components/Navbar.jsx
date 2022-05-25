@@ -1,18 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthStatus } from '../hooks/useAuthStatus';
 
 function Navbar() {
+  const { loggedIn } = useAuthStatus();
+
   return (
     <nav className="border-gray-200 border-b px-10 absolute w-full h-20 flex justify-between items-center">
-      <Link to="/" className="cursor-pointer font-bold text-2xl">
-        TEST LOGO
+      <Link
+        to="/"
+        className="cursor-pointer font-bold text-3xl flex items-center gap-3"
+      >
+        <img className="w-10" src="logo.svg" alt="" />
+        <h1 className="logo">Workouts Builder</h1>
       </Link>
       <div className="flex gap-6">
         <Link to="/exercises" className="btn btn-secondary w-40">
           Exercises
         </Link>
-        <Link to="/login" className="btn btn-primary w-40">
-          Log In
+        <Link
+          to={loggedIn ? '/profile' : '/sign-in'}
+          className="btn btn-primary w-40"
+        >
+          {loggedIn ? 'My profile' : 'Sign in'}
         </Link>
       </div>
     </nav>

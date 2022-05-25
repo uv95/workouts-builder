@@ -13,7 +13,7 @@ function Pagination({
     pageNumbers.push(i);
   }
   return (
-    <div className="btn-group fixed bottom-5">
+    <div className="btn-group mt-10 absolute">
       {pageNumbers.map((number) => (
         <Link
           className={currentPage === number ? 'btn btn-active' : 'btn'}

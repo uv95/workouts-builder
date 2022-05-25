@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Play:wght@700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -11,4 +13,46 @@
 .collapse:not(.collapse-close)
   :where(input[type='checkbox']:checked ~ .collapse-content) {
   padding-bottom: 0;
+}
+
+.logo {
+  font-family: 'Play', sans-serif;
+}
+
+.btn-group {
+  top: 54rem;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input {
+  overflow: hidden;
+}
+
+.input-group {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.01),
+    0 8px 10px -6px rgb(0 0 0 / 0.06);
+  overflow: hidden;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.alert {
+  animation: disappear 3s 1;
+}
+
+@keyframes disappear {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
