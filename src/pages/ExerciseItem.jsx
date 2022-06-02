@@ -1,23 +1,22 @@
 import React, { useContext, useEffect } from 'react';
 import ExercisesContext from '../context/ExercisesContext';
 import Breadcrumbs from '../components/Breadcrumbs';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import heart from '../assets/svg/heart.svg';
 
 function ExerciseItem() {
-  const { searchResults, getExerciseName } = useContext(ExercisesContext);
+  const { searchResults, dispatch } = useContext(ExercisesContext);
   const location = useLocation();
-
-  const exName = location.pathname.slice(
-    location.pathname.lastIndexOf('/') + 1
-  );
+  const params = useParams();
 
   useEffect(() => {
-    getExerciseName(
-      (exName.split(' ')[0][0].toUpperCase() + exName.slice(1)).replaceAll(
-        '_',
-        ' '
-      )
-    );
+    dispatch({
+      type: 'GET_EXERCISE_NAME',
+      payload: (
+        params.exercise.split(' ')[0][0].toUpperCase() +
+        params.exercise.slice(1)
+      ).replaceAll('_', ' '),
+    });
   }, []);
 
   return (
@@ -25,7 +24,7 @@ function ExerciseItem() {
       <Breadcrumbs link={location.pathname} index={-1} />
       <div className="mt-4 text-xl">
         {searchResults.map((ex, i) => {
-          if (ex.name.replaceAll(' ', '_').toLowerCase() === exName) {
+          if (ex.name.replaceAll(' ', '_').toLowerCase() === params.exercise) {
             return (
               <div key={i} className="flex gap-16 mx-10">
                 <img

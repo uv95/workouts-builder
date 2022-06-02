@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Muscle from '../components/Muscle';
 import BodyPart from '../components/BodyPart';
@@ -7,10 +7,16 @@ import ExercisesContext from '../context/ExercisesContext';
 import Breadcrumbs from '../components/Breadcrumbs';
 
 function Exercises() {
-  const { fetchExercises } = useContext(ExercisesContext);
+  const { fetchExercises, getLocalStorageData } = useContext(ExercisesContext);
 
   const musclesRef = useRef();
   const equipRef = useRef();
+
+  // this is to make sure that all data is updated at the same time
+  useEffect(() => {
+    const data = localStorage.getItem('favorites');
+    getLocalStorageData(JSON.parse(data));
+  }, []);
 
   const showExercises = () => {
     const arr = Array.from(musclesRef.current.getElementsByTagName('input'));

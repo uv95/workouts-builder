@@ -1,13 +1,24 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import ExercisesContext from '../context/ExercisesContext';
 import { Link, useNavigate } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Pagination from '../components/Pagination';
+import { ReactComponent as Heart } from '../assets/svg/heart.svg';
+import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { db } from '../firebase.config';
 
 function SearchResults() {
-  const { searchResults } = useContext(ExercisesContext);
+  const { searchResults, getLocalStorageData, favorites, dispatch } =
+    useContext(ExercisesContext);
   const navigate = useNavigate();
+  const auth = getAuth();
+  const userId = auth.currentUser.uid;
 
+  //update user favorites
+  const userFavoritesRef = doc(db, 'users', userId);
+
+  //pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [exercisesPerPage] = useState(8);
 
@@ -21,6 +32,53 @@ function SearchResults() {
   //change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  useEffect(() => {
+    const data = localStorage.getItem('favorites');
+    getLocalStorageData(JSON.parse(data));
+    dispatch({
+      type: 'RESTORE_FAVORITES_AFTER_RELOADING',
+      payload: JSON.parse(data),
+    });
+  }, []);
+
+  //mark/unmark as favorite and add/remove from favorites
+  const toggleFavorite = (ex) => {
+    if (!ex.favorite) {
+      dispatch({
+        type: 'MARK_FAVORITE',
+        payload: ex,
+      });
+      dispatch({
+        type: 'ADD_TO_FAVORITES',
+        payload: ex,
+      });
+    }
+    if (ex.favorite) {
+      dispatch({
+        type: 'UNMARK_FAVORITE',
+        payload: ex,
+      });
+      dispatch({
+        type: 'REMOVE_FROM_FAVORITES',
+        payload: ex,
+      });
+    }
+  };
+
+  useEffect(() => {
+    //updates user's favorites in cloud firestore
+    (async () => {
+      await updateDoc(userFavoritesRef, {
+        favorites: [],
+      });
+      await updateDoc(userFavoritesRef, {
+        favorites: arrayUnion(...favorites),
+      });
+    })();
+
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }, [favorites]);
+
   return searchResults.length > 0 ? (
     <>
       <Breadcrumbs index={-2} />
@@ -29,17 +87,22 @@ function SearchResults() {
         {currentExercises.map((ex, index) => {
           return (
             <div
-              onClick={() =>
-                navigate(
-                  `/exercises/selected/${ex.name
-                    .replaceAll(' ', '_')
-                    .toLowerCase()}`
-                )
-              }
+              onClick={(e) => {
+                if (e.target.nodeName !== 'path')
+                  navigate(`${ex.name.replaceAll(' ', '_').toLowerCase()}`);
+              }}
               key={index}
               className="card w-60 h-80 bg-base-100 shadow-xl cursor-pointer"
             >
               <figure className="w-full h-3/5 bg-blue-300">
+                <div className="bg-white/75 w-9 h-9 absolute top-1 right-2 rounded-3xl flex justify-center items-center">
+                  <Heart
+                    className={`w-6 h-5 mt-[2px] stroke-1 stroke-red-500 ${
+                      ex.favorite ? 'fill-red-500' : 'fill-transparent'
+                    }`}
+                    onClick={() => toggleFavorite(ex)}
+                  />
+                </div>
                 <img
                   className="object-cover w-full h-full"
                   src={ex.image}

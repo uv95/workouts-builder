@@ -8,8 +8,11 @@ export const useAuthStatus = () => {
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
-      if (user) setLoggedIn(true);
+      if (user) {
+        setLoggedIn(true);
+      }
       setCheckingStatus(false);
+      if (!user) setLoggedIn(false);
     });
   });
 

@@ -11,6 +11,7 @@ import SearchResults from './pages/SearchResults';
 import { ExercisesProvider } from './context/ExercisesContext';
 import PrivateRoute from './components/PrivateRoute';
 import ForgotPassword from './pages/ForgotPassword';
+import MyWorkouts from './components/profile/MyWorkouts';
 
 function App() {
   return (
@@ -26,11 +27,12 @@ function App() {
               <Route path="/sign-in" element={<SignIn />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/profile" element={<PrivateRoute />}>
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile" element={<MyWorkouts />} />
+                <Route path="/profile/*" element={<Profile />} />
               </Route>
               <Route path="/exercises/selected" element={<SearchResults />} />
               <Route
-                path={`/exercises/selected/:link`}
+                path={`/exercises/selected/:exercise`}
                 element={<ExerciseItem />}
               />
             </Routes>
