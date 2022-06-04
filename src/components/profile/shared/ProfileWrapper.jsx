@@ -21,7 +21,7 @@ function ProfileWrapper({ children }) {
           {auth.currentUser.displayName}
         </p>
       </div>
-      <div className="row-span-2 sm:row-span-2">{children}</div>
+      <div className="ml-14 mt-6 row-span-2 sm:row-span-2">{children}</div>
       <div className="py-4 text-center">
         <Link
           className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"

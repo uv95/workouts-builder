@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Hero from './pages/Hero';
 import Navbar from './components/Navbar';
 import Exercises from './pages/Exercises';
@@ -30,9 +30,14 @@ function App() {
                 <Route path="/profile" element={<MyWorkouts />} />
                 <Route path="/profile/*" element={<Profile />} />
               </Route>
+
               <Route path="/exercises/selected" element={<SearchResults />} />
               <Route
-                path={`/exercises/selected/:exercise`}
+                path="/exercises/selected/:exercise"
+                element={<ExerciseItem />}
+              />
+              <Route
+                path="/profile/favorites/:exercise"
                 element={<ExerciseItem />}
               />
             </Routes>

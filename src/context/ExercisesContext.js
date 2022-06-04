@@ -8,7 +8,7 @@ export const ExercisesProvider = ({ children }) => {
 
   const initialState = {
     searchResults: [],
-    exerciseName: '',
+    exerciseName: '', //this one is for Breadcrumbs
     favorites: [],
   };
 
@@ -18,6 +18,32 @@ export const ExercisesProvider = ({ children }) => {
     setLocalStorageData(data);
   };
 
+  //mark/unmark as favorite and add/remove from favorites
+  const toggleFavorite = (ex) => {
+    if (!ex.favorite) {
+      dispatch({
+        type: 'MARK_FAVORITE',
+        payload: ex,
+      });
+      dispatch({
+        type: 'ADD_TO_FAVORITES',
+        payload: ex,
+      });
+    }
+    if (ex.favorite) {
+      dispatch({
+        type: 'UNMARK_FAVORITE',
+        payload: ex,
+      });
+      dispatch({
+        type: 'REMOVE_FROM_FAVORITES',
+        payload: ex,
+      });
+    }
+    console.log('toggle: favorites updated');
+  };
+
+  //display exercises according to the chosen categories
   const fetchExercises = async (bodyPart, muscle, equipment) => {
     const res = await fetch('../exercises.json', {
       headers: {
@@ -69,6 +95,7 @@ export const ExercisesProvider = ({ children }) => {
       value={{
         fetchExercises,
         getLocalStorageData,
+        toggleFavorite,
         ...state,
         dispatch,
       }}

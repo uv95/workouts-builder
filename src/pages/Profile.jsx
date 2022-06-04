@@ -2,9 +2,9 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Favorites from '../components/profile/Favorites';
 import Calendar from '../components/profile/Calendar';
-import Statistics from '../components/profile/Statistics';
+import Statistics from '../components/Statistics';
 import Measurements from '../components/profile/Measurements';
-import Setting from '../components/profile/Setting';
+import Settings from '../components/profile/Settings';
 import ProfileWrapper from '../components/profile/shared/ProfileWrapper';
 
 function Profile() {
@@ -15,7 +15,7 @@ function Profile() {
         <Route path="calendar" element={<Calendar />} />
         <Route path="measurements" element={<Measurements />} />
         <Route path="statistics" element={<Statistics />} />
-        <Route path="setting" element={<Setting />} />
+        <Route path="settings" element={<Settings />} />
       </Routes>
     </ProfileWrapper>
   );

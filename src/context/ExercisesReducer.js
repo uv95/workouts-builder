@@ -15,6 +15,12 @@ const exercisesReducer = (state, action) => {
         ...state,
         favorites: action.payload,
       };
+    case 'RESTORE_SEARCH_RESULTS_AFTER_RELOADING':
+      return {
+        ...state,
+
+        searchResults: action.payload,
+      };
     case 'MARK_FAVORITE':
       return {
         ...state,

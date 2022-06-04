@@ -47,7 +47,7 @@ function Exercises() {
 
   return (
     <>
-      <Breadcrumbs index={-3} />
+      <Breadcrumbs index={-3} path="fromExercises" />
 
       <div className="mt-4 w-3/4 flex justify-between">
         <div>

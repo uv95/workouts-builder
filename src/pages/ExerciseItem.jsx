@@ -2,12 +2,13 @@ import React, { useContext, useEffect } from 'react';
 import ExercisesContext from '../context/ExercisesContext';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useLocation, useParams } from 'react-router-dom';
-import heart from '../assets/svg/heart.svg';
 
 function ExerciseItem() {
-  const { searchResults, dispatch } = useContext(ExercisesContext);
+  const { dispatch } = useContext(ExercisesContext);
   const location = useLocation();
   const params = useParams();
+  const searchResults = JSON.parse(localStorage.getItem('search results'));
+  const favorites = JSON.parse(localStorage.getItem('favorites'));
 
   useEffect(() => {
     dispatch({
@@ -21,9 +22,21 @@ function ExerciseItem() {
 
   return (
     <>
-      <Breadcrumbs link={location.pathname} index={-1} />
+      <Breadcrumbs
+        link={location.pathname}
+        index={-1}
+        path={
+          location.pathname.startsWith('/exercises')
+            ? 'fromExercises'
+            : 'fromFavorites'
+        }
+      />
       <div className="mt-4 text-xl">
-        {searchResults.map((ex, i) => {
+        {/* the exercise renders from either search results or favorites (both stored in localStorage) */}
+        {(location.pathname.startsWith('/exercises')
+          ? searchResults
+          : favorites
+        ).map((ex, i) => {
           if (ex.name.replaceAll(' ', '_').toLowerCase() === params.exercise) {
             return (
               <div key={i} className="flex gap-16 mx-10">
