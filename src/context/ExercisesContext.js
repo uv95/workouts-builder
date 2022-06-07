@@ -1,13 +1,20 @@
 import { createContext, useReducer, useState } from 'react';
 import exercisesReducer from './ExercisesReducer';
+import { useAuthStatus } from '../hooks/useAuthStatus.js';
 
 const ExercisesContext = createContext();
 
 export const ExercisesProvider = ({ children }) => {
   const [localStorageData, setLocalStorageData] = useState([]);
+  const { loggedIn, checkingStatus } = useAuthStatus();
 
   const initialState = {
     searchResults: [],
+    chosenCategories: {
+      bodyParts: [],
+      muscles: [],
+      equipment: [],
+    },
     exerciseName: '', //this one is for Breadcrumbs
     favorites: [],
     loading: false,
@@ -72,6 +79,16 @@ export const ExercisesProvider = ({ children }) => {
       });
     });
 
+    if (loggedIn) {
+      const data = localStorage.getItem('favorites');
+      getLocalStorageData(JSON.parse(data));
+
+      dispatch({
+        type: 'RESTORE_FAVORITES_AFTER_RELOADING',
+        payload: JSON.parse(data),
+      });
+    }
+
     // if there are already exercises marked as favorite (in localStorage) -> they should be displayed as favorite in new search results
     const exercisesListWithFavorites = exercisesList.map((ex) => {
       return localStorageData.some((ex1) => ex1.name === ex.name)
@@ -79,7 +96,6 @@ export const ExercisesProvider = ({ children }) => {
         : ex;
     });
 
-    console.log('fetch here');
     dispatch({ type: 'SHOW_EXERCISES', payload: exercisesListWithFavorites });
   };
 

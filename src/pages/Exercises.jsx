@@ -43,7 +43,13 @@ function Exercises() {
       .filter((el) => el.checked)
       .map((el) => el.value);
 
-    fetchExercises(chosenBodyParts, chosenMuscles, chosenEquipment);
+    const chosenCategories = {};
+    chosenCategories.bodyParts = chosenBodyParts;
+    chosenCategories.muscles = chosenMuscles;
+    chosenCategories.equipment = chosenEquipment;
+
+    dispatch({ type: 'GET_CHOSEN_CATEGORIES', payload: chosenCategories });
+    localStorage.setItem('chosen categories', JSON.stringify(chosenCategories));
 
     dispatch({ type: 'SET_LOADING', payload: true });
   };

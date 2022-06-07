@@ -17,6 +17,9 @@ function SearchResults() {
     getLocalStorageData,
     favorites,
     newSearch,
+    chosenCategories,
+    fetchExercises,
+    localStorageData,
     dispatch,
   } = useContext(ExercisesContext);
   const { loggedIn } = useAuthStatus();
@@ -40,25 +43,28 @@ function SearchResults() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
-    //making sure that the favorites and search results are still there after reloading the page
-    if (loggedIn) {
-      const data = localStorage.getItem('favorites');
-      getLocalStorageData(JSON.parse(data));
+    // making sure that the favorites and search results are still there after reloading the page
+    // if (loggedIn) {
+    //   const data = localStorage.getItem('favorites');
+    //   getLocalStorageData(JSON.parse(data));
 
-      dispatch({
-        type: 'RESTORE_FAVORITES_AFTER_RELOADING',
-        payload: JSON.parse(data),
-      });
-    }
+    //   dispatch({
+    //     type: 'RESTORE_FAVORITES_AFTER_RELOADING',
+    //     payload: JSON.parse(data),
+    //   });
+    // }
 
-    const data2 = localStorage.getItem('search results');
-    dispatch({
-      type: 'RESTORE_SEARCH_RESULTS_AFTER_RELOADING',
-      payload: JSON.parse(data2),
-    });
+    const chosenExercises = JSON.parse(
+      localStorage.getItem('chosen categories')
+    );
+    fetchExercises(
+      chosenExercises.bodyParts,
+      chosenExercises.muscles,
+      chosenExercises.equipment
+    );
 
-    console.log('useEffect []');
-  }, []);
+    console.log('useEffect []', chosenExercises);
+  }, [loggedIn]);
 
   // same: to display the same exercises after reloading
   useEffect(() => {

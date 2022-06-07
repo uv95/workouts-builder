@@ -7,20 +7,25 @@ const exercisesReducer = (state, action) => {
         loading: false,
         newSearch: true,
       };
+    case 'GET_CHOSEN_CATEGORIES':
+      return {
+        ...state,
+        chosenCategories: {
+          bodyParts: action.payload.bodyParts,
+          muscles: action.payload.muscles,
+          equipment: action.payload.equipment,
+        },
+      };
     case 'GET_EXERCISE_NAME':
       return {
         ...state,
         exerciseName: action.payload,
       };
     case 'RESTORE_FAVORITES_AFTER_RELOADING':
+      console.log('RESTORE_FAVORITES_AFTER_RELOADING');
       return {
         ...state,
         favorites: action.payload,
-      };
-    case 'RESTORE_SEARCH_RESULTS_AFTER_RELOADING':
-      return {
-        ...state,
-        searchResults: action.payload,
       };
     case 'MARK_FAVORITE':
       return {
