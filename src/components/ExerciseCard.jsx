@@ -1,28 +1,39 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ExercisesContext from '../context/ExercisesContext';
 import { ReactComponent as Heart } from '../assets/svg/heart.svg';
 import { useAuthStatus } from '../hooks/useAuthStatus.js';
-import add from '../assets/svg/add.svg';
+import NewWorkout from './NewWorkout';
 
 function ExerciseCard({ ex }) {
-  const { toggleFavorite } = useContext(ExercisesContext);
+  const [showNewWorkout, setShowNewWorkout] = useState(false);
+  const { dispatch, toggleFavorite } = useContext(ExercisesContext);
   const navigate = useNavigate();
   const { loggedIn } = useAuthStatus();
 
+  const onClick = (e) => {
+    //shouldn't open the exercise page if you click on Heart button
+    if (e.target.nodeName !== 'path' && e.target.innerText !== '+') {
+      navigate(`${ex.name.replaceAll(' ', '_').toLowerCase()}`);
+      dispatch({ type: 'SET_LOADING', payload: true });
+    }
+  };
+
   return (
     <div
-      onClick={(e) => {
-        //shouldn't open the exercise page if you click on Heart button
-        if (e.target.nodeName !== 'path')
-          navigate(`${ex.name.replaceAll(' ', '_').toLowerCase()}`);
-      }}
+      onClick={onClick}
       className="card w-60 h-80 bg-base-100 shadow-xl cursor-pointer"
     >
       <figure className="w-full h-3/5 bg-blue-300">
         {loggedIn && (
           <div className="absolute top-1 right-2 flex justify-between gap-1">
-            <div className="bg-white/75 w-9 h-9 rounded-3xl flex justify-center items-center text-4xl font-bold pb-[5px] text-primary-focus">
+            <div
+              className="bg-white/75 w-9 h-9 rounded-3xl flex justify-center items-center text-4xl font-bold pb-[5px] text-primary-focus"
+              onClick={(e) => {
+                setShowNewWorkout(!showNewWorkout);
+                console.log('ADD', e.target.innerText);
+              }}
+            >
               +
             </div>
             <div className="bg-white/75 w-9 h-9 rounded-3xl flex justify-center items-center">

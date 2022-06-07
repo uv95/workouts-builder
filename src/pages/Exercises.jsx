@@ -7,7 +7,8 @@ import ExercisesContext from '../context/ExercisesContext';
 import Breadcrumbs from '../components/Breadcrumbs';
 
 function Exercises() {
-  const { fetchExercises, getLocalStorageData } = useContext(ExercisesContext);
+  const { fetchExercises, getLocalStorageData, dispatch } =
+    useContext(ExercisesContext);
 
   const musclesRef = useRef();
   const equipRef = useRef();
@@ -25,7 +26,7 @@ function Exercises() {
     const chosenMuscles = [
       ...new Set(
         arr
-          .filter((el) => el.checked && el.classList.contains('checkbox'))
+          .filter((el) => el.checked && el.classList.contains('muscle'))
           .map((el) => el.value)
       ),
     ];
@@ -33,8 +34,8 @@ function Exercises() {
     const chosenBodyParts = [
       ...new Set(
         arr
-          .filter((el) => el.checked && el.classList.contains('checkbox'))
-          .map((el) => el.parentElement.parentElement.dataset.name)
+          .filter((el) => el.checked && el.classList.contains('muscle'))
+          .map((el) => el.closest('.bodyPart').dataset.name)
       ),
     ];
 
@@ -43,6 +44,8 @@ function Exercises() {
       .map((el) => el.value);
 
     fetchExercises(chosenBodyParts, chosenMuscles, chosenEquipment);
+
+    dispatch({ type: 'SET_LOADING', payload: true });
   };
 
   return (

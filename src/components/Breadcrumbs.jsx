@@ -3,7 +3,7 @@ import ExercisesContext from '../context/ExercisesContext';
 import { Link } from 'react-router-dom';
 
 function Breadcrumbs({ path, link, index }) {
-  const { exerciseName } = useContext(ExercisesContext);
+  const { exerciseName, dispatch } = useContext(ExercisesContext);
 
   // paths to unique exercise page
   const pathFromExercises = [
@@ -27,7 +27,14 @@ function Breadcrumbs({ path, link, index }) {
         {pathType.slice(0, index).map((page, i) => {
           return (
             <li key={i}>
-              <Link to={page[0]}>{page[1]}</Link>
+              <Link
+                onClick={() =>
+                  dispatch({ type: 'SET_LOADING', payload: false })
+                }
+                to={page[0]}
+              >
+                {page[1]}
+              </Link>
             </li>
           );
         })}

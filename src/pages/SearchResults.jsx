@@ -1,21 +1,25 @@
 import React, { useContext, useState, useEffect } from 'react';
 import ExercisesContext from '../context/ExercisesContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Pagination from '../components/Pagination';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { db } from '../firebase.config';
 import ExerciseCard from '../components/ExerciseCard';
 import { useAuthStatus } from '../hooks/useAuthStatus.js';
 import Spinner from '../components/Spinner';
 
 function SearchResults() {
-  const { searchResults, getLocalStorageData, favorites, dispatch } =
-    useContext(ExercisesContext);
+  const {
+    searchResults,
+    loading,
+    getLocalStorageData,
+    favorites,
+    newSearch,
+    dispatch,
+  } = useContext(ExercisesContext);
   const { loggedIn } = useAuthStatus();
-
-  const navigate = useNavigate();
 
   const auth = getAuth();
   const userFavoritesRef = loggedIn
@@ -25,7 +29,6 @@ function SearchResults() {
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [exercisesPerPage] = useState(8);
-
   const indexOfLastExercise = currentPage * exercisesPerPage;
   const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
   const currentExercises = searchResults.slice(
@@ -53,28 +56,35 @@ function SearchResults() {
       type: 'RESTORE_SEARCH_RESULTS_AFTER_RELOADING',
       payload: JSON.parse(data2),
     });
+
+    console.log('useEffect []');
   }, []);
 
+  // same: to display the same exercises after reloading
   useEffect(() => {
     localStorage.setItem('search results', JSON.stringify(currentExercises));
-  }, [currentExercises]);
+    if (!newSearch) dispatch({ type: 'SET_LOADING', payload: false });
+  }, [searchResults]);
 
   useEffect(() => {
     if (loggedIn) {
       localStorage.setItem('favorites', JSON.stringify(favorites));
 
       // updates user's favorites in cloud firestore
-      userFavoritesRef &&
-        (async () => {
-          await updateDoc(userFavoritesRef, {
-            favorites: [],
-          });
-          await updateDoc(userFavoritesRef, {
-            favorites: arrayUnion(...favorites),
-          });
-        })();
+      const updateFavorites = async () => {
+        await updateDoc(userFavoritesRef, {
+          favorites: [],
+        });
+        await updateDoc(userFavoritesRef, {
+          favorites: arrayUnion(...favorites),
+        });
+      };
+
+      userFavoritesRef && updateFavorites();
     }
   }, [favorites]);
+
+  if (loading) return <Spinner />;
 
   if (searchResults.length > 0)
     return (
@@ -82,9 +92,10 @@ function SearchResults() {
         <Breadcrumbs index={-2} path="fromExercises" />
 
         <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-4 sm:grid-cols-2 gap-20 gap-y-10">
-          {currentExercises.map((ex, index) => {
-            return <ExerciseCard ex={ex} key={index} />;
-          })}
+          {!loading &&
+            currentExercises.map((ex, index) => {
+              return <ExerciseCard ex={ex} key={index} />;
+            })}
         </div>
 
         <Pagination

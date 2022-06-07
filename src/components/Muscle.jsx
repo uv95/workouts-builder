@@ -5,7 +5,7 @@ function Muscle({ muscle }) {
     <label className="label cursor-pointer flex justify-start gap-6 ">
       <input
         type="checkbox"
-        className="checkbox checkbox-sm"
+        className="checkbox checkbox-sm muscle"
         value={muscle.toLowerCase().replace(' ', '_')}
       />
       <span className="label-text text-xl">{muscle}</span>

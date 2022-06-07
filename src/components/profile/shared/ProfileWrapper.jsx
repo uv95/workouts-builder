@@ -7,22 +7,20 @@ function ProfileWrapper({ children }) {
   const auth = getAuth();
   const navigate = useNavigate();
 
-  const { loggedIn } = useAuthStatus();
-
   const onLogout = () => {
     auth.signOut();
     navigate('/');
   };
 
   return (
-    <div className="grid lg:grid-cols-[300px_1fr] md:grid-cols-[300px_1fr] sm:grid-cols-[230px_1fr] w-full mt-32">
+    <div className="grid  lg:grid-cols-[300px_1fr] md:grid-cols-[300px_1fr] sm:grid-cols-[230px_1fr] w-full mt-32 grid-rows-[80px_1fr]">
       <div className="h-20">
         <p className="ml-10 mt-4 text-4xl font-bold">
           {auth.currentUser.displayName}
         </p>
       </div>
       <div className="ml-14 mt-6 row-span-2 sm:row-span-2">{children}</div>
-      <div className="py-4 text-center">
+      <div className="py-4 text-center ">
         <Link
           className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"
           to=" "

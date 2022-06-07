@@ -4,6 +4,8 @@ const exercisesReducer = (state, action) => {
       return {
         ...state,
         searchResults: action.payload,
+        loading: false,
+        newSearch: true,
       };
     case 'GET_EXERCISE_NAME':
       return {
@@ -18,7 +20,6 @@ const exercisesReducer = (state, action) => {
     case 'RESTORE_SEARCH_RESULTS_AFTER_RELOADING':
       return {
         ...state,
-
         searchResults: action.payload,
       };
     case 'MARK_FAVORITE':
@@ -63,6 +64,11 @@ const exercisesReducer = (state, action) => {
         favorites: [
           ...new Map(state.favorites.map((ex) => [ex.name, ex])).values(),
         ],
+      };
+    case 'SET_LOADING':
+      return {
+        ...state,
+        loading: action.payload,
       };
   }
 };
