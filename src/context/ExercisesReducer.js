@@ -4,17 +4,6 @@ const exercisesReducer = (state, action) => {
       return {
         ...state,
         searchResults: action.payload,
-        loading: false,
-        newSearch: true,
-      };
-    case 'GET_CHOSEN_CATEGORIES':
-      return {
-        ...state,
-        chosenCategories: {
-          bodyParts: action.payload.bodyParts,
-          muscles: action.payload.muscles,
-          equipment: action.payload.equipment,
-        },
       };
     case 'GET_EXERCISE_NAME':
       return {
@@ -22,11 +11,11 @@ const exercisesReducer = (state, action) => {
         exerciseName: action.payload,
       };
     case 'RESTORE_FAVORITES_AFTER_RELOADING':
-      console.log('RESTORE_FAVORITES_AFTER_RELOADING');
       return {
         ...state,
         favorites: action.payload,
       };
+
     case 'MARK_FAVORITE':
       return {
         ...state,
@@ -37,9 +26,12 @@ const exercisesReducer = (state, action) => {
         }),
       };
     case 'ADD_TO_FAVORITES':
+      console.log('ADD_TO_FAVORITES');
       const favoriteExercise = state.searchResults.find(
         (ex) => ex.name === action.payload.name
       );
+      console.log(state.favorites);
+
       return {
         ...state,
         //prevents from adding one exercise several times (provides array of unique objects)
@@ -50,6 +42,8 @@ const exercisesReducer = (state, action) => {
         ],
       };
     case 'UNMARK_FAVORITE':
+      console.log('UNMARK_FAVORITE');
+
       return {
         ...state,
         searchResults: state.searchResults.map((ex) => {
@@ -59,21 +53,19 @@ const exercisesReducer = (state, action) => {
         }),
       };
     case 'REMOVE_FROM_FAVORITES':
+      console.log('REMOVE_FROM_FAVORITES');
+
       const index = state.favorites.findIndex(
         (ex) => ex.name === action.payload.name
       );
       state.favorites.splice(index, 1);
+      console.log(state.favorites);
       return {
         ...state,
         // helps remove unmarked exercises immediately
         favorites: [
           ...new Map(state.favorites.map((ex) => [ex.name, ex])).values(),
         ],
-      };
-    case 'SET_LOADING':
-      return {
-        ...state,
-        loading: action.payload,
       };
   }
 };

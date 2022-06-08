@@ -15,7 +15,7 @@ function ExerciseCard({ ex }) {
     //shouldn't open the exercise page if you click on Heart button
     if (e.target.nodeName !== 'path' && e.target.innerText !== '+') {
       navigate(`${ex.name.replaceAll(' ', '_').toLowerCase()}`);
-      dispatch({ type: 'SET_LOADING', payload: true });
+      // dispatch({ type: 'SET_LOADING' });
     }
   };
 

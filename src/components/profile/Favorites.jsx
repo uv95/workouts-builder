@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import ExercisesContext from '../../context/ExercisesContext';
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion, disableNetwork } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase.config';
 import ExerciseCard from '../ExerciseCard';
@@ -34,6 +34,9 @@ function Favorites() {
 
     localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
+
+  if (favorites.length === 0)
+    return <p className="text-2xl mt-1">No favorites yet!</p>;
 
   return (
     <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:grid-cols-1 gap-20 gap-y-10 ">

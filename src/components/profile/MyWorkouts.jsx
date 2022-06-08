@@ -8,7 +8,7 @@ function MyWorkouts() {
   return (
     <ProfileWrapper>
       {isEmpty && (
-        <div className="flex items-center justify-between">
+        <div className="flex justify-between mt-1">
           <p className="text-2xl ">No workouts yet!</p>
           <Link
             to="/exercises"

@@ -9,6 +9,7 @@ function ProfileWrapper({ children }) {
 
   const onLogout = () => {
     auth.signOut();
+    localStorage.removeItem('favorites');
     navigate('/');
   };
 

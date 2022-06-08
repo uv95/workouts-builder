@@ -7,17 +7,10 @@ import ExercisesContext from '../context/ExercisesContext';
 import Breadcrumbs from '../components/Breadcrumbs';
 
 function Exercises() {
-  const { fetchExercises, getLocalStorageData, dispatch } =
-    useContext(ExercisesContext);
+  const { dispatch } = useContext(ExercisesContext);
 
   const musclesRef = useRef();
   const equipRef = useRef();
-
-  // this is to make sure that all data is updated at the same time
-  useEffect(() => {
-    const data = localStorage.getItem('favorites');
-    getLocalStorageData(JSON.parse(data));
-  }, []);
 
   const showExercises = () => {
     const arr = Array.from(musclesRef.current.getElementsByTagName('input'));
@@ -48,10 +41,7 @@ function Exercises() {
     chosenCategories.muscles = chosenMuscles;
     chosenCategories.equipment = chosenEquipment;
 
-    dispatch({ type: 'GET_CHOSEN_CATEGORIES', payload: chosenCategories });
     localStorage.setItem('chosen categories', JSON.stringify(chosenCategories));
-
-    dispatch({ type: 'SET_LOADING', payload: true });
   };
 
   return (
