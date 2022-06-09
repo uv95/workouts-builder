@@ -1,14 +1,11 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Muscle from '../components/Muscle';
 import BodyPart from '../components/BodyPart';
 import Equipment from '../components/Equipment';
-import ExercisesContext from '../context/ExercisesContext';
 import Breadcrumbs from '../components/Breadcrumbs';
 
 function Exercises() {
-  const { dispatch } = useContext(ExercisesContext);
-
   const musclesRef = useRef();
   const equipRef = useRef();
 

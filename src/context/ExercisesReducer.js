@@ -15,6 +15,16 @@ const exercisesReducer = (state, action) => {
         ...state,
         favorites: action.payload,
       };
+    case 'RESTORE_SEARCH_RESULTS_AFTER_RELOADING':
+      return {
+        ...state,
+        //used in ExerciseItem page to keep favorite property updated after reloading
+        searchResults: action.payload.map((ex) =>
+          state.favorites.some((ex1) => ex1.name === ex.name)
+            ? { ...ex, favorite: true }
+            : { ...ex, favorite: false }
+        ),
+      };
 
     case 'MARK_FAVORITE':
       return {
@@ -26,12 +36,9 @@ const exercisesReducer = (state, action) => {
         }),
       };
     case 'ADD_TO_FAVORITES':
-      console.log('ADD_TO_FAVORITES');
       const favoriteExercise = state.searchResults.find(
         (ex) => ex.name === action.payload.name
       );
-      console.log(state.favorites);
-
       return {
         ...state,
         //prevents from adding one exercise several times (provides array of unique objects)
@@ -42,8 +49,6 @@ const exercisesReducer = (state, action) => {
         ],
       };
     case 'UNMARK_FAVORITE':
-      console.log('UNMARK_FAVORITE');
-
       return {
         ...state,
         searchResults: state.searchResults.map((ex) => {
@@ -51,21 +56,50 @@ const exercisesReducer = (state, action) => {
             ? { ...ex, favorite: false }
             : ex;
         }),
+        profileFavorites: state.favorites.map((ex) => {
+          return ex.name === action.payload.name
+            ? { ...ex, favorite: false }
+            : ex;
+        }),
       };
     case 'REMOVE_FROM_FAVORITES':
-      console.log('REMOVE_FROM_FAVORITES');
-
       const index = state.favorites.findIndex(
         (ex) => ex.name === action.payload.name
       );
       state.favorites.splice(index, 1);
-      console.log(state.favorites);
       return {
         ...state,
         // helps remove unmarked exercises immediately
         favorites: [
           ...new Map(state.favorites.map((ex) => [ex.name, ex])).values(),
         ],
+      };
+    case 'GET_EXERCISE':
+      return {
+        ...state,
+        exercise: action.payload,
+      };
+    case 'TOGGLE_NEW_WORKOUT':
+      return {
+        ...state,
+        showNewWorkout: !state.showNewWorkout,
+      };
+    case 'CREATE_NEW_WORKOUT':
+      return {
+        ...state,
+        workouts: [...state.workouts, action.payload],
+      };
+    case 'ADD_TO_WORKOUT':
+      return {
+        ...state,
+        workouts: state.workouts.map((workout) => {
+          return workout.name === action.payload.name
+            ? {
+                ...workout,
+                exercises: [...workout.exercises, action.payload.exercise],
+              }
+            : workout;
+        }),
       };
   }
 };

@@ -54,9 +54,9 @@ function ProfileWrapper({ children }) {
         </Link>
         <Link
           className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"
-          to="setting"
+          to="settings"
         >
-          <p className="ml-5">Setting</p>
+          <p className="ml-5">Settings</p>
         </Link>
         <button onClick={onLogout} className="btn btn-secondary mt-10">
           Sign out

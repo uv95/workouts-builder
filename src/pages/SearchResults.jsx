@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import ExercisesContext from '../context/ExercisesContext';
 import { Link } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
@@ -9,10 +9,11 @@ import { db } from '../firebase.config';
 import ExerciseCard from '../components/ExerciseCard';
 import { useAuthStatus } from '../hooks/useAuthStatus.js';
 import Spinner from '../components/Spinner';
+import NewWorkout from '../components/NewWorkout';
 
 function SearchResults() {
   const [loading, setLoading] = useState(true);
-  const { searchResults, favorites, fetchExercises, dispatch } =
+  const { searchResults, showNewWorkout, favorites, fetchExercises } =
     useContext(ExercisesContext);
   const { loggedIn } = useAuthStatus();
 
@@ -67,7 +68,7 @@ function SearchResults() {
         });
       };
 
-      userFavoritesRef && updateFavorites();
+      updateFavorites();
     }
   }, [favorites]);
 
@@ -77,6 +78,7 @@ function SearchResults() {
     return (
       <>
         <Breadcrumbs index={-2} path="fromExercises" />
+        {showNewWorkout && <NewWorkout />}
 
         <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-4 sm:grid-cols-2 gap-20 gap-y-10">
           {currentExercises.map((ex, index) => {

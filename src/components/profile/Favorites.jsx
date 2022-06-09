@@ -1,16 +1,19 @@
 import React, { useContext, useEffect } from 'react';
 import ExercisesContext from '../../context/ExercisesContext';
-import { doc, updateDoc, arrayUnion, disableNetwork } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase.config';
 import ExerciseCard from '../ExerciseCard';
+import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 
 function Favorites() {
   const { favorites, dispatch } = useContext(ExercisesContext);
+  const { loggedIn } = useAuthStatus();
+
   const auth = getAuth();
-  const userId = auth.currentUser.uid;
-  //update user favorites
-  const userFavoritesRef = doc(db, 'users', userId);
+  const userFavoritesRef = loggedIn
+    ? doc(db, 'users', auth.currentUser.uid)
+    : null;
 
   // making sure that the favorites are still there after reloading the page
   useEffect(() => {
@@ -22,17 +25,20 @@ function Favorites() {
   }, []);
 
   useEffect(() => {
-    //updates user's favorites in cloud firestore
-    (async () => {
-      await updateDoc(userFavoritesRef, {
-        favorites: [],
-      });
-      await updateDoc(userFavoritesRef, {
-        favorites: arrayUnion(...favorites),
-      });
-    })();
+    if (loggedIn) {
+      localStorage.setItem('favorites', JSON.stringify(favorites));
 
-    localStorage.setItem('favorites', JSON.stringify(favorites));
+      // updates user's favorites in cloud firestore
+      const updateFavorites = async () => {
+        await updateDoc(userFavoritesRef, {
+          favorites: [],
+        });
+        await updateDoc(userFavoritesRef, {
+          favorites: arrayUnion(...favorites),
+        });
+      };
+      updateFavorites();
+    }
   }, [favorites]);
 
   if (favorites.length === 0)

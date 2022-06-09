@@ -1,6 +1,5 @@
-import { createContext, useReducer, useState, useRef } from 'react';
+import { createContext, useReducer, useRef } from 'react';
 import exercisesReducer from './ExercisesReducer';
-import { useAuthStatus } from '../hooks/useAuthStatus.js';
 
 const ExercisesContext = createContext();
 
@@ -9,7 +8,9 @@ export const ExercisesProvider = ({ children }) => {
     searchResults: [],
     exerciseName: '', //this one is for Breadcrumbs
     favorites: [],
+    exercise: {},
     workouts: [],
+    showNewWorkout: false,
   };
 
   const [state, dispatch] = useReducer(exercisesReducer, initialState);
@@ -36,7 +37,6 @@ export const ExercisesProvider = ({ children }) => {
         payload: ex,
       });
     }
-    console.log('toggle', ex.favorite);
   };
 
   const latestFavorites = useRef([]);
