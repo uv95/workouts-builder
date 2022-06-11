@@ -5,6 +5,8 @@ import { ReactComponent as VisibilityIcon } from '../assets/svg/visibilityIcon.s
 import Alert from '../components/Alert';
 import { ReactComponent as LockIcon } from '../assets/svg/lockIcon.svg';
 import { ReactComponent as Email } from '../assets/svg/email.svg';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase.config';
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,7 +39,24 @@ function SignIn() {
         password
       );
 
-      if (userCredential.user) navigate(-1);
+      // set the current user's favorites and workouts to local storage
+      try {
+        const userRef = doc(db, 'users', auth.currentUser.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists())
+          localStorage.setItem(
+            'favorites',
+            JSON.stringify(userSnap.data().favorites)
+          );
+        localStorage.setItem(
+          'workouts',
+          JSON.stringify(userSnap.data().workouts)
+        );
+      } catch (error) {
+        console.log(error);
+      }
+
+      if (userCredential.user) navigate('/profile');
     } catch (error) {
       setShowAlert(true);
       setTimeout(() => {

@@ -1,16 +1,36 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { getAuth } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStatus } from '../../../hooks/useAuthStatus';
+import ExercisesContext from '../../../context/ExercisesContext';
 
 function ProfileWrapper({ children }) {
+  const { favorites, workouts, showNewWorkout, dispatch } =
+    useContext(ExercisesContext);
   const auth = getAuth();
   const navigate = useNavigate();
 
   const onLogout = () => {
     auth.signOut();
+    localStorage.removeItem('favorites');
+    localStorage.removeItem('workouts');
     navigate('/');
   };
+
+  // making sure that the favorites are still there after reloading the page
+  useEffect(() => {
+    dispatch({
+      type: 'RESTORE_WORKOUTS_AFTER_RELOADING',
+      payload: JSON.parse(localStorage.getItem('workouts')),
+    });
+    dispatch({
+      type: 'RESTORE_FAVORITES_AFTER_RELOADING',
+      payload: JSON.parse(localStorage.getItem('favorites')),
+    });
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('workouts', JSON.stringify(workouts));
+  }, [workouts]);
 
   return (
     <div className="grid  lg:grid-cols-[300px_1fr] md:grid-cols-[300px_1fr] sm:grid-cols-[230px_1fr] w-full mt-32 grid-rows-[80px_1fr]">
@@ -53,9 +73,9 @@ function ProfileWrapper({ children }) {
         </Link>
         <Link
           className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"
-          to="setting"
+          to="settings"
         >
-          <p className="ml-5">Setting</p>
+          <p className="ml-5">Settings</p>
         </Link>
         <button onClick={onLogout} className="btn btn-secondary mt-10">
           Sign out

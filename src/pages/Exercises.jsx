@@ -1,23 +1,13 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Muscle from '../components/Muscle';
 import BodyPart from '../components/BodyPart';
 import Equipment from '../components/Equipment';
-import ExercisesContext from '../context/ExercisesContext';
 import Breadcrumbs from '../components/Breadcrumbs';
 
 function Exercises() {
-  const { fetchExercises, getLocalStorageData, dispatch } =
-    useContext(ExercisesContext);
-
   const musclesRef = useRef();
   const equipRef = useRef();
-
-  // this is to make sure that all data is updated at the same time
-  useEffect(() => {
-    const data = localStorage.getItem('favorites');
-    getLocalStorageData(JSON.parse(data));
-  }, []);
 
   const showExercises = () => {
     const arr = Array.from(musclesRef.current.getElementsByTagName('input'));
@@ -43,9 +33,12 @@ function Exercises() {
       .filter((el) => el.checked)
       .map((el) => el.value);
 
-    fetchExercises(chosenBodyParts, chosenMuscles, chosenEquipment);
+    const chosenCategories = {};
+    chosenCategories.bodyParts = chosenBodyParts;
+    chosenCategories.muscles = chosenMuscles;
+    chosenCategories.equipment = chosenEquipment;
 
-    dispatch({ type: 'SET_LOADING', payload: true });
+    localStorage.setItem('chosen categories', JSON.stringify(chosenCategories));
   };
 
   return (

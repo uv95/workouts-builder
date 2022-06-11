@@ -4,43 +4,62 @@ import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase.config';
 import ExerciseCard from '../ExerciseCard';
+import { useAuthStatus } from '../../hooks/useAuthStatus.js';
+import NewWorkout from '../NewWorkout';
 
 function Favorites() {
-  const { favorites, dispatch } = useContext(ExercisesContext);
+  const { favorites, workouts, showNewWorkout } = useContext(ExercisesContext);
+  const { loggedIn } = useAuthStatus();
+
   const auth = getAuth();
-  const userId = auth.currentUser.uid;
-  //update user favorites
-  const userFavoritesRef = doc(db, 'users', userId);
-
-  // making sure that the favorites are still there after reloading the page
-  useEffect(() => {
-    const data = localStorage.getItem('favorites');
-    dispatch({
-      type: 'RESTORE_FAVORITES_AFTER_RELOADING',
-      payload: JSON.parse(data),
-    });
-  }, []);
+  const userRef = loggedIn ? doc(db, 'users', auth.currentUser.uid) : null;
 
   useEffect(() => {
-    //updates user's favorites in cloud firestore
-    (async () => {
-      await updateDoc(userFavoritesRef, {
-        favorites: [],
-      });
-      await updateDoc(userFavoritesRef, {
-        favorites: arrayUnion(...favorites),
-      });
-    })();
+    if (loggedIn) {
+      localStorage.setItem('favorites', JSON.stringify(favorites));
 
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-  }, [favorites]);
+      // updates user's favorites in cloud firestore
+      const updateFavorites = async () => {
+        await updateDoc(userRef, {
+          favorites: [],
+        });
+        await updateDoc(userRef, {
+          favorites: arrayUnion(...favorites),
+        });
+      };
+      updateFavorites();
+    }
+  }, [favorites, loggedIn]);
+
+  useEffect(() => {
+    if (loggedIn) {
+      localStorage.setItem('workouts', JSON.stringify(workouts));
+
+      // updates user's workouts in cloud firestore
+      const updateWorkouts = async () => {
+        await updateDoc(userRef, {
+          workouts: [],
+        });
+        await updateDoc(userRef, {
+          workouts: arrayUnion(...workouts),
+        });
+      };
+      updateWorkouts();
+    }
+  }, [workouts, loggedIn]);
+
+  if (favorites?.length === 0 || !favorites)
+    return <p className="text-2xl mt-1">No favorites yet!</p>;
 
   return (
-    <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:grid-cols-1 gap-20 gap-y-10 ">
-      {favorites.map((ex, index) => {
-        return <ExerciseCard ex={ex} key={index} />;
-      })}
-    </div>
+    <>
+      {showNewWorkout && <NewWorkout />}
+      <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:grid-cols-1 gap-20 gap-y-10 ">
+        {favorites.map((ex, index) => {
+          return <ExerciseCard ex={ex} key={index} />;
+        })}
+      </div>
+    </>
   );
 }
 

@@ -22,6 +22,7 @@ function SignUp() {
     email: '',
     password: '',
     favorites: [],
+    workouts: [],
   });
   const { name, email, password } = formData;
 

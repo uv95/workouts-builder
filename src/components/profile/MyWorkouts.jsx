@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import ProfileWrapper from './shared/ProfileWrapper';
 import { Link } from 'react-router-dom';
+import ExercisesContext from '../../context/ExercisesContext';
 
 function MyWorkouts() {
-  const [isEmpty, setIsEmpty] = useState(true);
+  const { workouts } = useContext(ExercisesContext);
 
   return (
     <ProfileWrapper>
-      {isEmpty && (
-        <div className="flex items-center justify-between">
+      {workouts.length === 0 ? (
+        <div className="flex justify-between mt-1">
           <p className="text-2xl ">No workouts yet!</p>
           <Link
             to="/exercises"
@@ -18,6 +19,20 @@ function MyWorkouts() {
             <p>New workout</p>
           </Link>
         </div>
+      ) : (
+        <ul>
+          {workouts.map((workout, i) => (
+            <li key={i}>
+              <p className="font-bold">{workout.name}</p>
+              <ul>
+                {workout.exercises.length > 0 &&
+                  workout.exercises.map((ex, index) => (
+                    <li key={index}>{ex.name}</li>
+                  ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
       )}
     </ProfileWrapper>
   );

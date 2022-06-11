@@ -4,8 +4,6 @@ const exercisesReducer = (state, action) => {
       return {
         ...state,
         searchResults: action.payload,
-        loading: false,
-        newSearch: true,
       };
     case 'GET_EXERCISE_NAME':
       return {
@@ -17,11 +15,22 @@ const exercisesReducer = (state, action) => {
         ...state,
         favorites: action.payload,
       };
+    case 'RESTORE_WORKOUTS_AFTER_RELOADING':
+      return {
+        ...state,
+        workouts: action.payload,
+      };
     case 'RESTORE_SEARCH_RESULTS_AFTER_RELOADING':
       return {
         ...state,
-        searchResults: action.payload,
+        //used in ExerciseItem page to keep favorite property updated after reloading
+        searchResults: action.payload.map((ex) =>
+          state.favorites.some((ex1) => ex1.name === ex.name)
+            ? { ...ex, favorite: true }
+            : { ...ex, favorite: false }
+        ),
       };
+
     case 'MARK_FAVORITE':
       return {
         ...state,
@@ -65,10 +74,32 @@ const exercisesReducer = (state, action) => {
           ...new Map(state.favorites.map((ex) => [ex.name, ex])).values(),
         ],
       };
-    case 'SET_LOADING':
+    case 'GET_EXERCISE':
       return {
         ...state,
-        loading: action.payload,
+        exercise: action.payload,
+      };
+    case 'TOGGLE_NEW_WORKOUT':
+      return {
+        ...state,
+        showNewWorkout: !state.showNewWorkout,
+      };
+    case 'CREATE_NEW_WORKOUT':
+      return {
+        ...state,
+        workouts: [...state.workouts, action.payload],
+      };
+    case 'ADD_TO_WORKOUT':
+      return {
+        ...state,
+        workouts: state.workouts.map((workout) => {
+          return workout.name === action.payload.name
+            ? {
+                ...workout,
+                exercises: [...workout.exercises, ...action.payload.exercises],
+              }
+            : workout;
+        }),
       };
   }
 };

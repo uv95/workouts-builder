@@ -1,25 +1,19 @@
-import { createContext, useReducer, useState } from 'react';
+import { createContext, useReducer, useRef } from 'react';
 import exercisesReducer from './ExercisesReducer';
 
 const ExercisesContext = createContext();
 
 export const ExercisesProvider = ({ children }) => {
-  const [localStorageData, setLocalStorageData] = useState([]);
-
   const initialState = {
     searchResults: [],
     exerciseName: '', //this one is for Breadcrumbs
     favorites: [],
-    loading: false,
-    newSearch: true,
+    exercise: {},
     workouts: [],
+    showNewWorkout: false,
   };
 
   const [state, dispatch] = useReducer(exercisesReducer, initialState);
-
-  const getLocalStorageData = (data) => {
-    setLocalStorageData(data);
-  };
 
   //mark/unmark as favorite and add/remove from favorites
   const toggleFavorite = (ex) => {
@@ -45,49 +39,62 @@ export const ExercisesProvider = ({ children }) => {
     }
   };
 
+  const latestFavorites = useRef([]);
+
   //display exercises according to the chosen categories
   const fetchExercises = async (bodyPart, muscle, equipment) => {
-    const res = await fetch('/exercises.json');
-    const data = await res.json();
+    try {
+      const res = await fetch('/exercises.json');
+      const data = await res.json();
 
-    let exercisesList = [];
+      let exercisesList = [];
 
-    bodyPart.forEach((bp) => {
-      muscle.forEach((mus) => {
-        if (!data[bp][mus]) return;
-        equipment.forEach((eq) => {
-          if (data[bp][mus][eq]) {
-            let [exercise] = data[bp][mus][eq];
-            //determine muscle and equipment to show on each exercise's card
-            if (exercise) {
-              exercise.muscle = `${bp[0].toUpperCase()}${bp.slice(1)}`;
-              exercise.equipment = `${eq[0].toUpperCase()}${eq
-                .slice(1)
-                .replaceAll('_', ' ')}`;
+      bodyPart.forEach((bp) => {
+        muscle.forEach((mus) => {
+          if (!data[bp][mus]) return;
+          equipment.forEach((eq) => {
+            if (data[bp][mus][eq]) {
+              let [exercise] = data[bp][mus][eq];
+              //determine muscle and equipment to show on each exercise's card
+              if (exercise) {
+                exercise.muscle = `${bp[0].toUpperCase()}${bp.slice(1)}`;
+                exercise.equipment = `${eq[0].toUpperCase()}${eq
+                  .slice(1)
+                  .replaceAll('_', ' ')}`;
 
-              exercisesList.push(exercise);
+                exercisesList.push(exercise);
+              }
             }
-          }
+          });
         });
       });
-    });
 
-    // if there are already exercises marked as favorite (in localStorage) -> they should be displayed as favorite in new search results
-    const exercisesListWithFavorites = exercisesList.map((ex) => {
-      return localStorageData.some((ex1) => ex1.name === ex.name)
-        ? { ...ex, favorite: true }
-        : ex;
-    });
+      dispatch({
+        type: 'RESTORE_FAVORITES_AFTER_RELOADING',
+        payload: JSON.parse(localStorage.getItem('favorites')),
+      });
 
-    console.log('fetch here');
-    dispatch({ type: 'SHOW_EXERCISES', payload: exercisesListWithFavorites });
+      // if there are already exercises marked as favorite (in localStorage) -> they should be displayed as favorite in new search results
+      latestFavorites.current = JSON.parse(localStorage.getItem('favorites'));
+
+      const exercisesListWithFavorites = exercisesList.map((ex) => {
+        if (latestFavorites.current)
+          return latestFavorites.current.some((ex1) => ex1.name === ex.name)
+            ? { ...ex, favorite: true }
+            : ex;
+        if (!latestFavorites.current) return exercisesList;
+      });
+
+      dispatch({ type: 'SHOW_EXERCISES', payload: exercisesListWithFavorites });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <ExercisesContext.Provider
       value={{
         fetchExercises,
-        getLocalStorageData,
         toggleFavorite,
         ...state,
         dispatch,

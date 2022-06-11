@@ -27,14 +27,7 @@ function Breadcrumbs({ path, link, index }) {
         {pathType.slice(0, index).map((page, i) => {
           return (
             <li key={i}>
-              <Link
-                onClick={() =>
-                  dispatch({ type: 'SET_LOADING', payload: false })
-                }
-                to={page[0]}
-              >
-                {page[1]}
-              </Link>
+              <Link to={page[0]}>{page[1]}</Link>
             </li>
           );
         })}
