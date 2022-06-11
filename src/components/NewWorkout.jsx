@@ -1,51 +1,41 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import ExercisesContext from '../context/ExercisesContext';
 
 function NewWorkout() {
   const { workouts, dispatch, exercise } = useContext(ExercisesContext);
-  const [workoutName, setWorkoutName] = useState('');
+  const [value, setValue] = useState(workouts[0]?.name);
   const [workout, setWorkout] = useState({
     name: '',
-    exercises: {},
+    exercises: [],
   });
 
   const { name, exercises } = workout;
 
-  useEffect(() => {
-    console.log(workouts);
-  }, [workouts]);
-
   const addToWorkout = (e) => {
     e.preventDefault();
     dispatch({ type: 'TOGGLE_NEW_WORKOUT' });
-    dispatch({ type: 'ADD_TO_WORKOUT', payload: workout });
-    console.log('addToWorkout', workout, workoutName);
-  };
-  const selectWorkout = (e) => {
-    // e.preventDefault();
-    // setWorkout({ ...workout, name: e.target.value });
-    setWorkoutName(e);
-    console.log(workoutName);
-    setWorkout({
-      ...workout,
-      name: workoutName,
-      exercises: exercise,
+    dispatch({
+      type: 'ADD_TO_WORKOUT',
+      payload: { name: value, exercises: [exercise] },
     });
+    localStorage.setItem('workouts', JSON.stringify(workouts));
+  };
+
+  const selectWorkout = (e) => {
+    setValue(e.target.value);
   };
 
   const createNewWorkout = (e) => {
     e.preventDefault();
-    console.log(workout);
     dispatch({ type: 'TOGGLE_NEW_WORKOUT' });
     dispatch({ type: 'CREATE_NEW_WORKOUT', payload: workout });
-    console.log(workouts);
-    console.log('create workout', workout);
+    localStorage.setItem('workouts', JSON.stringify(workouts));
   };
+
   const onChange = (e) => {
     setWorkout({
-      ...workout,
       name: e.target.value,
-      exercises: exercise,
+      exercises: [exercise],
     });
   };
 
@@ -73,7 +63,7 @@ function NewWorkout() {
           <div className="flex justify-between">
             <select
               onChange={(e) => selectWorkout(e)}
-              value={workoutName}
+              value={value}
               className="select select-primary w-2/3 max-w-xs"
             >
               {workouts.map((workout, index) => (

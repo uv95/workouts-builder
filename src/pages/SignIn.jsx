@@ -39,18 +39,23 @@ function SignIn() {
         password
       );
 
-      // set the current user's favorites to local storage
+      // set the current user's favorites and workouts to local storage
       try {
-        const userFavoritesRef = doc(db, 'users', auth.currentUser.uid);
-        const userFavoritesSnap = await getDoc(userFavoritesRef);
-        if (userFavoritesSnap.exists())
+        const userRef = doc(db, 'users', auth.currentUser.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists())
           localStorage.setItem(
             'favorites',
-            JSON.stringify(userFavoritesSnap.data().favorites)
+            JSON.stringify(userSnap.data().favorites)
           );
+        localStorage.setItem(
+          'workouts',
+          JSON.stringify(userSnap.data().workouts)
+        );
       } catch (error) {
         console.log(error);
       }
+
       if (userCredential.user) navigate('/profile');
     } catch (error) {
       setShowAlert(true);

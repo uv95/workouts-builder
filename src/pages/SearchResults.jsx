@@ -47,7 +47,7 @@ function SearchResults() {
     );
 
     searchResults.length > 0 && setLoading(false);
-  }, [loggedIn, searchResults.length]);
+  }, [searchResults.length]);
 
   // to avoid problems opening unique exercises
   useEffect(() => {
@@ -67,10 +67,9 @@ function SearchResults() {
           favorites: arrayUnion(...favorites),
         });
       };
-
       updateFavorites();
     }
-  }, [favorites]);
+  }, [favorites, loggedIn]);
 
   if (loading) return <Spinner />;
 

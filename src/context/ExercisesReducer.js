@@ -15,6 +15,11 @@ const exercisesReducer = (state, action) => {
         ...state,
         favorites: action.payload,
       };
+    case 'RESTORE_WORKOUTS_AFTER_RELOADING':
+      return {
+        ...state,
+        workouts: action.payload,
+      };
     case 'RESTORE_SEARCH_RESULTS_AFTER_RELOADING':
       return {
         ...state,
@@ -56,11 +61,6 @@ const exercisesReducer = (state, action) => {
             ? { ...ex, favorite: false }
             : ex;
         }),
-        profileFavorites: state.favorites.map((ex) => {
-          return ex.name === action.payload.name
-            ? { ...ex, favorite: false }
-            : ex;
-        }),
       };
     case 'REMOVE_FROM_FAVORITES':
       const index = state.favorites.findIndex(
@@ -96,7 +96,7 @@ const exercisesReducer = (state, action) => {
           return workout.name === action.payload.name
             ? {
                 ...workout,
-                exercises: [...workout.exercises, action.payload.exercise],
+                exercises: [...workout.exercises, ...action.payload.exercises],
               }
             : workout;
         }),

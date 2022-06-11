@@ -76,10 +76,13 @@ export const ExercisesProvider = ({ children }) => {
 
       // if there are already exercises marked as favorite (in localStorage) -> they should be displayed as favorite in new search results
       latestFavorites.current = JSON.parse(localStorage.getItem('favorites'));
+
       const exercisesListWithFavorites = exercisesList.map((ex) => {
-        return latestFavorites.current.some((ex1) => ex1.name === ex.name)
-          ? { ...ex, favorite: true }
-          : ex;
+        if (latestFavorites.current)
+          return latestFavorites.current.some((ex1) => ex1.name === ex.name)
+            ? { ...ex, favorite: true }
+            : ex;
+        if (!latestFavorites.current) return exercisesList;
       });
 
       dispatch({ type: 'SHOW_EXERCISES', payload: exercisesListWithFavorites });

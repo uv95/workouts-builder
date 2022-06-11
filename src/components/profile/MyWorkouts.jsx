@@ -4,11 +4,7 @@ import { Link } from 'react-router-dom';
 import ExercisesContext from '../../context/ExercisesContext';
 
 function MyWorkouts() {
-  const { workouts, dispatch } = useContext(ExercisesContext);
-
-  useEffect(() => {
-    console.log(workouts);
-  }, []);
+  const { workouts } = useContext(ExercisesContext);
 
   return (
     <ProfileWrapper>
@@ -27,7 +23,7 @@ function MyWorkouts() {
         <ul>
           {workouts.map((workout, i) => (
             <li key={i}>
-              <p>{workout.name}</p>
+              <p className="font-bold">{workout.name}</p>
               <ul>
                 {workout.exercises.length > 0 &&
                   workout.exercises.map((ex, index) => (
