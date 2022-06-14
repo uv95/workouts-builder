@@ -1,13 +1,13 @@
 import React, { useEffect, useContext } from 'react';
 import { getAuth } from 'firebase/auth';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ExercisesContext from '../../../context/ExercisesContext';
 
 function ProfileWrapper({ children }) {
-  const { favorites, workouts, showNewWorkout, dispatch } =
-    useContext(ExercisesContext);
+  const { workouts, dispatch } = useContext(ExercisesContext);
   const auth = getAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const onLogout = () => {
     auth.signOut();
@@ -45,37 +45,71 @@ function ProfileWrapper({ children }) {
           className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"
           to=" "
         >
-          <p className="ml-5">My workouts</p>
+          <p
+            className={`ml-5 ${location.pathname.endsWith('/') && 'font-bold'}`}
+          >
+            My workouts
+          </p>
         </Link>
         <Link
           className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"
           to="favorites"
         >
-          <p className="ml-5">Favorite exercises</p>
+          <p
+            className={`ml-5 ${
+              location.pathname.endsWith('/favorites') && 'font-bold'
+            }`}
+          >
+            Favorite exercises
+          </p>
         </Link>
         <Link
           className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"
           to="calendar"
         >
-          <p className="ml-5">Calendar</p>
+          <p
+            className={`ml-5 ${
+              location.pathname.endsWith('/calendar') && 'font-bold'
+            }`}
+          >
+            Calendar
+          </p>
         </Link>
         <Link
           className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"
           to="statistics"
         >
-          <p className="ml-5">Statistics</p>
+          <p
+            className={`ml-5 ${
+              location.pathname.endsWith('/statistics') && 'font-bold'
+            }`}
+          >
+            Statistics
+          </p>
         </Link>
         <Link
           className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"
           to="measurements"
         >
-          <p className="ml-5">Measurements</p>
+          <p
+            className={`ml-5 ${
+              location.pathname.endsWith('/measurements') && 'font-bold'
+            }`}
+          >
+            Measurements
+          </p>
         </Link>
         <Link
           className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"
           to="settings"
         >
-          <p className="ml-5">Settings</p>
+          <p
+            className={`ml-5 ${
+              location.pathname.endsWith('/settings') && 'font-bold'
+            }`}
+          >
+            Settings
+          </p>
         </Link>
         <button onClick={onLogout} className="btn btn-secondary mt-10">
           Sign out

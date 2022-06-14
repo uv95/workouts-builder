@@ -67,7 +67,14 @@ function SignIn() {
 
   return (
     <>
-      {showAlert && <Alert type="error" text="Wrong email or password." />}
+      {showAlert && (
+        <Alert
+          type="error"
+          text="Wrong email or password."
+          position="absolute top-24"
+          icon="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      )}
       <form onSubmit={onSubmit} className="mt-36 form-control w-80 text-lg ">
         <label className="input-group mb-5">
           <span className="w-16 bg-primary flex justify-center">

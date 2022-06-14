@@ -70,7 +70,12 @@ function SignUp() {
   return (
     <>
       {showAlert && (
-        <Alert type="error" text="Could not sign up. Please try again." />
+        <Alert
+          type="error"
+          text="Could not sign up. Please try again."
+          position="absolute top-24"
+          icon="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
       )}
       <form className="mt-36 form-control w-80 text-lg" onSubmit={onSubmit}>
         <label className="input-group mb-5">

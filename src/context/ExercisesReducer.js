@@ -46,7 +46,7 @@ const exercisesReducer = (state, action) => {
       );
       return {
         ...state,
-        //prevents from adding one exercise several times (provides array of unique objects)
+        //prevents from adding one exercise several times (provnamees array of unique objects)
         favorites: [
           ...new Map(
             [...state.favorites, favoriteExercise].map((ex) => [ex.name, ex])
@@ -93,10 +93,44 @@ const exercisesReducer = (state, action) => {
       return {
         ...state,
         workouts: state.workouts.map((workout) => {
+          // workout.id does not work. Why?
           return workout.name === action.payload.name
             ? {
                 ...workout,
                 exercises: [...workout.exercises, ...action.payload.exercises],
+              }
+            : workout;
+        }),
+      };
+    case 'DELETE_WORKOUT':
+      return {
+        ...state,
+        workouts: state.workouts.filter((workout) => {
+          return workout.id !== action.payload.id;
+        }),
+      };
+    case 'REMOVE_FROM_WORKOUT':
+      return {
+        ...state,
+        workouts: state.workouts.map((workout) => {
+          return workout.id === action.payload.workout.id
+            ? {
+                ...workout,
+                exercises: workout.exercises.filter(
+                  (ex) => ex.name !== action.payload.exercise.name
+                ),
+              }
+            : workout;
+        }),
+      };
+    case 'CHANGE_WORKOUT_NAME':
+      return {
+        ...state,
+        workouts: state.workouts.map((workout) => {
+          return workout.id === action.payload.workout.id
+            ? {
+                ...workout,
+                name: action.payload.name,
               }
             : workout;
         }),

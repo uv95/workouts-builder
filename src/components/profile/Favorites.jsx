@@ -15,7 +15,7 @@ function Favorites() {
   const userRef = loggedIn ? doc(db, 'users', auth.currentUser.uid) : null;
 
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedIn && favorites !== null) {
       localStorage.setItem('favorites', JSON.stringify(favorites));
 
       // updates user's favorites in cloud firestore
@@ -32,7 +32,7 @@ function Favorites() {
   }, [favorites, loggedIn]);
 
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedIn && workouts !== null) {
       localStorage.setItem('workouts', JSON.stringify(workouts));
 
       // updates user's workouts in cloud firestore
