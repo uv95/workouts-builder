@@ -6,11 +6,13 @@ import Statistics from '../components/profile/Statistics';
 import Measurements from '../components/profile/Measurements';
 import Settings from '../components/profile/Settings';
 import ProfileWrapper from '../components/profile/shared/ProfileWrapper';
+import MyWorkouts from '../components/profile/MyWorkouts';
 
 function Profile() {
   return (
     <ProfileWrapper>
       <Routes>
+        <Route path="myworkouts" element={<MyWorkouts />} />
         <Route path="favorites" element={<Favorites />} />
         <Route path="calendar" element={<Calendar />} />
         <Route path="measurements" element={<Measurements />} />

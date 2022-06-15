@@ -3,24 +3,18 @@ import ExercisesContext from '../context/ExercisesContext';
 import { Link } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Pagination from '../components/Pagination';
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { db } from '../firebase.config';
 import ExerciseCard from '../components/ExerciseCard';
 import { useAuthStatus } from '../hooks/useAuthStatus.js';
+import { useUpdateData } from '../hooks/useUpdateData';
 import Spinner from '../components/Spinner';
 import NewWorkout from '../components/NewWorkout';
 
 function SearchResults() {
   const [loading, setLoading] = useState(true);
-  const { searchResults, showNewWorkout, favorites, fetchExercises } =
+  const { searchResults, showNewWorkout, favorites, workouts, fetchExercises } =
     useContext(ExercisesContext);
   const { loggedIn } = useAuthStatus();
-
-  const auth = getAuth();
-  const userFavoritesRef = loggedIn
-    ? doc(db, 'users', auth.currentUser.uid)
-    : null;
+  const { updateFavorites, updateWorkouts } = useUpdateData();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [exercisesPerPage] = useState(8);
@@ -55,21 +49,12 @@ function SearchResults() {
   }, [currentExercises]);
 
   useEffect(() => {
-    if (loggedIn) {
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-
-      // updates user's favorites in cloud firestore
-      const updateFavorites = async () => {
-        await updateDoc(userFavoritesRef, {
-          favorites: [],
-        });
-        await updateDoc(userFavoritesRef, {
-          favorites: arrayUnion(...favorites),
-        });
-      };
-      updateFavorites();
-    }
+    updateFavorites();
   }, [favorites, loggedIn]);
+
+  useEffect(() => {
+    updateWorkouts();
+  }, [workouts, loggedIn]);
 
   if (loading) return <Spinner />;
 

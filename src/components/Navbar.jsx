@@ -21,7 +21,7 @@ function Navbar() {
         <Link to="/exercises" className="btn btn-secondary w-40">
           Exercises
         </Link>
-        <Link to="/profile" className="btn btn-primary w-40">
+        <Link to="/profile/myworkouts" className="btn btn-primary w-40">
           {loggedIn ? 'My profile' : 'Sign in'}
         </Link>
       </div>

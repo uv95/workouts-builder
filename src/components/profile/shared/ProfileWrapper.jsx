@@ -43,10 +43,12 @@ function ProfileWrapper({ children }) {
       <div className="py-4 text-center ">
         <Link
           className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"
-          to=" "
+          to="myworkouts"
         >
           <p
-            className={`ml-5 ${location.pathname.endsWith('/') && 'font-bold'}`}
+            className={`ml-5 ${
+              location.pathname.endsWith('/myworkouts') && 'font-bold'
+            }`}
           >
             My workouts
           </p>

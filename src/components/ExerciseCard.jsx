@@ -4,8 +4,8 @@ import ExercisesContext from '../context/ExercisesContext';
 import { ReactComponent as Heart } from '../assets/svg/heart.svg';
 import { useAuthStatus } from '../hooks/useAuthStatus.js';
 
-function ExerciseCard({ ex }) {
-  const { dispatch, exercise, toggleFavorite } = useContext(ExercisesContext);
+function ExerciseCard({ ex, small }) {
+  const { dispatch, toggleFavorite } = useContext(ExercisesContext);
 
   const navigate = useNavigate();
   const { loggedIn } = useAuthStatus();
@@ -20,10 +20,12 @@ function ExerciseCard({ ex }) {
   return (
     <div
       onClick={onClick}
-      className="card w-60 h-80 bg-base-100 shadow-xl cursor-pointer"
+      className={`card ${
+        small ? 'w-40 h-40' : 'w-60 h-80'
+      } bg-base-100 shadow-xl cursor-pointer`}
     >
-      <figure className="w-full h-3/5 bg-blue-300">
-        {loggedIn && (
+      <figure className={`${small ? 'h-1/2' : 'h-3/5'} w-full bg-blue-300`}>
+        {!small && loggedIn && (
           <div className="absolute top-1 right-2 flex justify-between gap-1">
             <div
               className="bg-white/75 w-9 h-9 rounded-3xl flex justify-center items-center text-4xl font-bold pb-[5px] text-primary-focus"
@@ -50,13 +52,21 @@ function ExerciseCard({ ex }) {
           alt={ex.name}
         />
       </figure>
-      <div className="card-body h-3/5 p-0 mx-4 ">
-        <h2 className="card-title h-1/4 mt-5 flex items-start">{ex.name}</h2>
-        <div className="mt-4">
-          <p>
-            Muscle: <span className="font-bold">{ex.muscle}</span>
-          </p>
-          <p>
+      <div className={`${small ? 'mx-2' : 'mx-4'} card-body h-3/5 p-0`}>
+        <h2
+          className={`${
+            small ? 'font-bold text-sm mt-3 leading-3' : 'mt-5'
+          } card-title h-1/4 flex items-start`}
+        >
+          {ex.name}
+        </h2>
+        <div className={small ? 'mt-1' : 'mt-4'}>
+          {!small && (
+            <p>
+              Muscle: <span className="font-bold">{ex.muscle}</span>
+            </p>
+          )}
+          <p className={small && 'text-xs leading-3'}>
             Equipment: <span className="font-bold">{ex.equipment}</span>
           </p>
         </div>

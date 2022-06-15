@@ -1,19 +1,18 @@
 import React, { useEffect, useContext, useState } from 'react';
 import ProfileWrapper from './shared/ProfileWrapper';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ExercisesContext from '../../context/ExercisesContext';
 import { ReactComponent as DeleteIcon } from '../../assets/svg/deleteIcon.svg';
 import { ReactComponent as EditIcon } from '../../assets/svg/editIcon.svg';
 import Alert from '../Alert';
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { db } from '../../firebase.config';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
+import { useUpdateData } from '../../hooks/useUpdateData.js';
 import { v4 as uuid } from 'uuid';
 
 function MyWorkouts() {
   const { workouts, dispatch } = useContext(ExercisesContext);
   const uniqueId = uuid();
+  const navigate = useNavigate();
 
   const [showAlert, setShowAlert] = useState(false);
   const [editWorkout, setEditWorkout] = useState(false);
@@ -22,12 +21,7 @@ function MyWorkouts() {
   const [isChanged, setIsChanged] = useState(false);
 
   const { loggedIn } = useAuthStatus();
-
-  const auth = getAuth();
-  const userRef = loggedIn ? doc(db, 'users', auth.currentUser.uid) : null;
-  // useEffect(() => {
-  //   console.log(newWorkoutName, 'newWorkoutName');
-  // }, []);
+  const { updateWorkouts } = useUpdateData();
 
   const onDelete = (workout) => {
     if (window.confirm('Are you sure you want to delete this workout?')) {
@@ -40,21 +34,9 @@ function MyWorkouts() {
 
     localStorage.setItem('workouts', JSON.stringify(workouts));
   };
-  useEffect(() => {
-    if (loggedIn && workouts !== null) {
-      localStorage.setItem('workouts', JSON.stringify(workouts));
 
-      // updates user's workouts in cloud firestore
-      const updateWorkouts = async () => {
-        await updateDoc(userRef, {
-          workouts: [],
-        });
-        await updateDoc(userRef, {
-          workouts: arrayUnion(...workouts),
-        });
-      };
-      updateWorkouts();
-    }
+  useEffect(() => {
+    updateWorkouts();
   }, [workouts, loggedIn]);
 
   const onEdit = (workout) => {
@@ -83,7 +65,7 @@ function MyWorkouts() {
   };
 
   return (
-    <ProfileWrapper>
+    <>
       {showAlert && (
         <Alert
           type="success"
@@ -95,20 +77,21 @@ function MyWorkouts() {
       {workouts === null || workouts.length === 0 ? (
         <div className="flex justify-between mt-1">
           <p className="text-2xl ">No workouts yet!</p>
-          <Link
+          <div
             to="/exercises"
             className="mr-20 text-lg flex items-center gap-2"
           >
             <p className="text-3xl text-primary mb-1">+</p>
             <p>New workout</p>
-          </Link>
+          </div>
         </div>
       ) : (
         <ul>
           {workouts.map((workout) => (
             <div key={workout.id} className="flex items-center gap-10 mb-7 ">
               <li
-                className={`relative rounded-xl flex justify-between bg-neutral-content p-3 w-2/3 shadow-md ${
+                onClick={() => !editWorkout && navigate(workout.id.slice(0, 8))}
+                className={`cursor-pointer relative rounded-xl flex justify-between bg-neutral-content p-3 w-2/3 shadow-md ${
                   editWorkout && workout?.id === workoutId && 'h-56 flex-col'
                 }`}
               >
@@ -125,7 +108,7 @@ function MyWorkouts() {
                     <input
                       type="text"
                       defaultValue={workout?.name}
-                      className="input w-44 max-w-xs bg-transparent placeholder-neutral font-bold text-xl"
+                      className="input w-60 max-w-xs bg-transparent placeholder-neutral font-bold text-xl"
                       onChange={onChange}
                     />
                   ) : (
@@ -197,8 +180,8 @@ function MyWorkouts() {
             </div>
           ))}
         </ul>
-      )}
-    </ProfileWrapper>
+      )}{' '}
+    </>
   );
 }
 

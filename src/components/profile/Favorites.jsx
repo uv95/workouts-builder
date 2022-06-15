@@ -1,51 +1,21 @@
 import React, { useContext, useEffect } from 'react';
 import ExercisesContext from '../../context/ExercisesContext';
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { db } from '../../firebase.config';
 import ExerciseCard from '../ExerciseCard';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import NewWorkout from '../NewWorkout';
+import { useUpdateData } from '../../hooks/useUpdateData.js';
 
 function Favorites() {
   const { favorites, workouts, showNewWorkout } = useContext(ExercisesContext);
   const { loggedIn } = useAuthStatus();
-
-  const auth = getAuth();
-  const userRef = loggedIn ? doc(db, 'users', auth.currentUser.uid) : null;
+  const { updateFavorites, updateWorkouts } = useUpdateData();
 
   useEffect(() => {
-    if (loggedIn && favorites !== null) {
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-
-      // updates user's favorites in cloud firestore
-      const updateFavorites = async () => {
-        await updateDoc(userRef, {
-          favorites: [],
-        });
-        await updateDoc(userRef, {
-          favorites: arrayUnion(...favorites),
-        });
-      };
-      updateFavorites();
-    }
+    updateFavorites();
   }, [favorites, loggedIn]);
 
   useEffect(() => {
-    if (loggedIn && workouts !== null) {
-      localStorage.setItem('workouts', JSON.stringify(workouts));
-
-      // updates user's workouts in cloud firestore
-      const updateWorkouts = async () => {
-        await updateDoc(userRef, {
-          workouts: [],
-        });
-        await updateDoc(userRef, {
-          workouts: arrayUnion(...workouts),
-        });
-      };
-      updateWorkouts();
-    }
+    updateWorkouts();
   }, [workouts, loggedIn]);
 
   if (favorites?.length === 0 || !favorites)
