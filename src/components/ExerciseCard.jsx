@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ExercisesContext from '../context/ExercisesContext';
 import { ReactComponent as Heart } from '../assets/svg/heart.svg';
@@ -63,7 +63,8 @@ function ExerciseCard({ ex, small }) {
         <div className={small ? 'mt-1' : 'mt-4'}>
           {!small && (
             <p>
-              Muscle: <span className="font-bold">{ex.muscle}</span>
+              Muscle: <span className="font-bold">{ex.muscleGroup}</span> (
+              {ex.muscle})
             </p>
           )}
           <p className={small && 'text-xs leading-3'}>

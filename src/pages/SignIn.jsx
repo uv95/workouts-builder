@@ -56,7 +56,7 @@ function SignIn() {
         console.log(error);
       }
 
-      if (userCredential.user) navigate('/profile');
+      if (userCredential.user) navigate('/profile/myworkouts');
     } catch (error) {
       setShowAlert(true);
       setTimeout(() => {

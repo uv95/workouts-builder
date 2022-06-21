@@ -133,7 +133,9 @@ function ExerciseItem() {
                   </div>
                   <div className="mb-6">
                     <p>
-                      Muscle: <span className="font-bold">{ex.muscle}</span>
+                      Muscle:{' '}
+                      <span className="font-bold">{ex.muscleGroup}</span> (
+                      {ex.muscle})
                     </p>
                     <p>
                       Equipment:{' '}

@@ -89,6 +89,7 @@ const exercisesReducer = (state, action) => {
         ...state,
         workouts: [...state.workouts, action.payload],
       };
+
     case 'ADD_TO_WORKOUT':
       return {
         ...state,
@@ -107,6 +108,13 @@ const exercisesReducer = (state, action) => {
         ...state,
         workouts: state.workouts.filter((workout) => {
           return workout.id !== action.payload.id;
+        }),
+      };
+    case 'UPDATE_WORKOUTS':
+      return {
+        ...state,
+        workouts: state.workouts.map((workout) => {
+          return workout.id === action.payload.id ? action.payload : workout;
         }),
       };
     case 'REMOVE_FROM_WORKOUT':

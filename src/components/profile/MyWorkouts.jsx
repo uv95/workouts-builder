@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState } from 'react';
-import ProfileWrapper from './shared/ProfileWrapper';
 import { useNavigate } from 'react-router-dom';
 import ExercisesContext from '../../context/ExercisesContext';
 import { ReactComponent as DeleteIcon } from '../../assets/svg/deleteIcon.svg';
@@ -118,7 +117,9 @@ function MyWorkouts() {
                   <p className="text-gray-400 text-sm">
                     <span className="text-neutral">Muscle groups: </span>
                     {[
-                      ...new Set(workout?.exercises.map((ex) => ex.muscle)),
+                      ...new Set(
+                        workout?.exercises.map((ex) => ex.muscleGroup)
+                      ),
                     ].join(', ')}
                   </p>
                 </div>

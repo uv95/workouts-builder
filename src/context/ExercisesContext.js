@@ -55,9 +55,10 @@ export const ExercisesProvider = ({ children }) => {
           equipment.forEach((eq) => {
             if (data[bp][mus][eq]) {
               let [exercise] = data[bp][mus][eq];
-              //determine muscle and equipment to show on each exercise's card
+              //determine muscles and equipment to show on each exercise's card
               if (exercise) {
-                exercise.muscle = `${bp[0].toUpperCase()}${bp.slice(1)}`;
+                exercise.muscleGroup = `${bp[0].toUpperCase()}${bp.slice(1)}`;
+                exercise.muscle = `${mus[0].toUpperCase()}${mus.slice(1)}`;
                 exercise.equipment = `${eq[0].toUpperCase()}${eq
                   .slice(1)
                   .replaceAll('_', ' ')}`;

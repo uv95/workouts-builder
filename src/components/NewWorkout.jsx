@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import ExercisesContext from '../context/ExercisesContext';
 import Alert from './Alert';
 import { v4 as uuid } from 'uuid';
@@ -52,7 +52,6 @@ function NewWorkout() {
       dispatch({ type: 'TOGGLE_NEW_WORKOUT' });
       dispatch({ type: 'CREATE_NEW_WORKOUT', payload: workout });
       localStorage.setItem('workouts', JSON.stringify(workouts));
-      console.log(workout);
     }
     if (workout.name === '') {
       setAlert({
