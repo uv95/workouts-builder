@@ -52,6 +52,10 @@ function SignIn() {
           'workouts',
           JSON.stringify(userSnap.data().workouts)
         );
+        localStorage.setItem(
+          'planned workouts',
+          JSON.stringify(userSnap.data().plannedWorkouts)
+        );
       } catch (error) {
         console.log(error);
       }

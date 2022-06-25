@@ -20,6 +20,11 @@ const exercisesReducer = (state, action) => {
         ...state,
         workouts: action.payload,
       };
+    case 'RESTORE_PLANNED_WORKOUTS_AFTER_RELOADING':
+      return {
+        ...state,
+        plannedWorkouts: action.payload,
+      };
     case 'RESTORE_SEARCH_RESULTS_AFTER_RELOADING':
       return {
         ...state,
@@ -142,6 +147,16 @@ const exercisesReducer = (state, action) => {
               }
             : workout;
         }),
+      };
+    case 'SET_PLANNED_WORKOUTS':
+      return {
+        ...state,
+        plannedWorkouts: [...state.plannedWorkouts, action.payload],
+      };
+    case 'CLEAR_PLANNED_WORKOUTS':
+      return {
+        ...state,
+        plannedWorkouts: [],
       };
   }
 };

@@ -11,7 +11,7 @@ import { ReactComponent as PersonIcon } from '../assets/svg/personIcon.svg';
 import { ReactComponent as GoogleIcon } from '../assets/svg/googleIcon.svg';
 import { ReactComponent as LockIcon } from '../assets/svg/lockIcon.svg';
 import { ReactComponent as Email } from '../assets/svg/email.svg';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase.config';
 
 function SignUp() {
@@ -23,6 +23,7 @@ function SignUp() {
     password: '',
     favorites: [],
     workouts: [],
+    plannedWorkouts: [],
   });
   const { name, email, password } = formData;
 
@@ -58,7 +59,27 @@ function SignUp() {
 
       await setDoc(doc(db, 'users', user.uid), formDataCopy);
 
-      navigate('/profile');
+      try {
+        const userRef = doc(db, 'users', auth.currentUser.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists())
+          localStorage.setItem(
+            'favorites',
+            JSON.stringify(userSnap.data().favorites)
+          );
+        localStorage.setItem(
+          'workouts',
+          JSON.stringify(userSnap.data().workouts)
+        );
+        localStorage.setItem(
+          'planned workouts',
+          JSON.stringify(userSnap.data().plannedWorkouts)
+        );
+      } catch (error) {
+        console.log(error);
+      }
+
+      navigate('/profile/myworkouts');
     } catch (error) {
       setShowAlert(true);
       setTimeout(() => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Favorites from '../components/profile/Favorites';
-import Calendar from '../components/profile/Calendar';
+import Calendar from '../components/profile/calendar/Calendar';
 import Statistics from '../components/profile/Statistics';
 import Measurements from '../components/profile/Measurements';
 import Settings from '../components/profile/Settings';

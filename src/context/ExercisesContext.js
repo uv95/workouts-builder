@@ -10,6 +10,7 @@ export const ExercisesProvider = ({ children }) => {
     favorites: [],
     exercise: {},
     workouts: [],
+    plannedWorkouts: [],
     showNewWorkout: false,
   };
 

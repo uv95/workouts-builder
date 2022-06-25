@@ -7,7 +7,7 @@ import { db } from '../firebase.config';
 
 export const useUpdateData = () => {
   const { loggedIn } = useAuthStatus();
-  const { favorites, workouts } = useContext(ExercisesContext);
+  const { favorites, workouts, plannedWorkouts } = useContext(ExercisesContext);
 
   const auth = getAuth();
   const userRef = loggedIn ? doc(db, 'users', auth.currentUser.uid) : null;
@@ -45,6 +45,22 @@ export const useUpdateData = () => {
       update();
     }
   };
+  const updatePlannedWorkouts = () => {
+    if (loggedIn && plannedWorkouts !== null) {
+      localStorage.setItem('planned workouts', JSON.stringify(plannedWorkouts));
 
-  return { updateFavorites, updateWorkouts };
+      // updates user's workouts in cloud firestore
+      const update = async () => {
+        await updateDoc(userRef, {
+          plannedWorkouts: [],
+        });
+        await updateDoc(userRef, {
+          plannedWorkouts: arrayUnion(...plannedWorkouts),
+        });
+      };
+      update();
+    }
+  };
+
+  return { updateFavorites, updateWorkouts, updatePlannedWorkouts };
 };

@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ExercisesContext from '../../../context/ExercisesContext';
 
 function ProfileWrapper({ children }) {
-  const { workouts, dispatch } = useContext(ExercisesContext);
+  const { workouts, dispatch, plannedWorkouts } = useContext(ExercisesContext);
   const auth = getAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -13,6 +13,7 @@ function ProfileWrapper({ children }) {
     auth.signOut();
     localStorage.removeItem('favorites');
     localStorage.removeItem('workouts');
+    localStorage.removeItem('planned workouts');
     navigate('/');
   };
 
@@ -21,6 +22,10 @@ function ProfileWrapper({ children }) {
     dispatch({
       type: 'RESTORE_WORKOUTS_AFTER_RELOADING',
       payload: JSON.parse(localStorage.getItem('workouts')),
+    });
+    dispatch({
+      type: 'RESTORE_PLANNED_WORKOUTS_AFTER_RELOADING',
+      payload: JSON.parse(localStorage.getItem('planned workouts')),
     });
     dispatch({
       type: 'RESTORE_FAVORITES_AFTER_RELOADING',
