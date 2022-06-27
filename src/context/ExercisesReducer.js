@@ -112,8 +112,12 @@ const exercisesReducer = (state, action) => {
       return {
         ...state,
         workouts: state.workouts.filter((workout) => {
-          return workout.id !== action.payload.id;
+          return workout.id !== action.payload;
         }),
+        //remove it from calendar as well
+        plannedWorkouts: state.plannedWorkouts.filter(
+          (workout) => workout.initialId !== action.payload
+        ),
       };
     case 'UPDATE_WORKOUTS':
       return {

@@ -40,6 +40,7 @@ function Calendar() {
         allDay: true,
         completed: false,
         initialColor: eventInfo.draggedEl.style.backgroundColor,
+        initialId: eventInfo.event.id,
       },
     });
   };
@@ -54,6 +55,8 @@ function Calendar() {
         start: eventInfo.event.start,
         allDay: true,
         completed: false,
+        initialColor: eventInfo.event.extendedProps.initialColor,
+        initialId: eventInfo.event.extendedProps.initialId,
       },
     });
   };

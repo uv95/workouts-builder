@@ -6,7 +6,7 @@ import Statistics from '../components/profile/Statistics';
 import Measurements from '../components/profile/Measurements';
 import Settings from '../components/profile/Settings';
 import ProfileWrapper from '../components/profile/shared/ProfileWrapper';
-import MyWorkouts from '../components/profile/MyWorkouts';
+import MyWorkouts from '../components/profile/workout/MyWorkouts';
 
 function Profile() {
   return (
