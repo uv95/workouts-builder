@@ -153,6 +153,41 @@ const exercisesReducer = (state, action) => {
         ...state,
         plannedWorkouts: [...state.plannedWorkouts, action.payload],
       };
+    case 'DELETE_PLANNED_WORKOUT':
+      return {
+        ...state,
+        plannedWorkouts: state.plannedWorkouts.filter(
+          (workout) => workout.id !== action.payload
+        ),
+      };
+    case 'CHANGE_WORKOUT_DATE':
+      const originalEventIndex = state.plannedWorkouts.indexOf(
+        state.plannedWorkouts.find((e) => e.id === action.payload)
+      );
+      const filteredArray = state.plannedWorkouts;
+      filteredArray.splice(originalEventIndex, 1);
+      return {
+        ...state,
+        plannedWorkouts: filteredArray,
+      };
+    case 'MARK_COMPLETED':
+      return {
+        ...state,
+        plannedWorkouts: state.plannedWorkouts.map((workout) => {
+          return workout.id === action.payload.id
+            ? { ...workout, color: action.payload.color, completed: true }
+            : workout;
+        }),
+      };
+    case 'MARK_UNCOMPLETED':
+      return {
+        ...state,
+        plannedWorkouts: state.plannedWorkouts.map((workout) => {
+          return workout.id === action.payload.id
+            ? { ...workout, color: action.payload.color, completed: false }
+            : workout;
+        }),
+      };
     case 'CLEAR_PLANNED_WORKOUTS':
       return {
         ...state,

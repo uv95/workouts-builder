@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import ExercisesContext from '../context/ExercisesContext';
 import Alert from './Alert';
 import { v4 as uuid } from 'uuid';

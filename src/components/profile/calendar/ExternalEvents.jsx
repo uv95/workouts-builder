@@ -37,6 +37,7 @@ function ExternalEvents({ workout, index }) {
     >
       {workout.name}
     </div>
+    //{' '}
   );
 }
 

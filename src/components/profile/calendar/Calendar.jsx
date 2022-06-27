@@ -2,20 +2,21 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import ExercisesContext from '../../../context/ExercisesContext';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
+import interactionPlugin from '@fullcalendar/interaction';
 import { useUpdateData } from '../../../hooks/useUpdateData.js';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../../firebase.config';
-import { getAuth } from 'firebase/auth';
 import ExternalEvents from './ExternalEvents';
+import { v4 as uuid } from 'uuid';
+import Modal from './Modal';
 
 function Calendar() {
-  const { workouts, plannedWorkouts, dispatch } = useContext(ExercisesContext);
+  const { workouts, plannedWorkouts, dispatch, toggleCompleted } =
+    useContext(ExercisesContext);
   const { loggedIn } = useAuthStatus();
-  const auth = getAuth();
+  const [showModal, setShowModal] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [event, setEvent] = useState({ id: '', completed: false });
   const { updatePlannedWorkouts } = useUpdateData();
-
   const fullCalendarRef = useRef(null);
 
   useEffect(() => {
@@ -25,12 +26,6 @@ function Calendar() {
   useEffect(() => {
     const calendar = fullCalendarRef.current.getApi();
     calendar.getEvents().forEach((e) => e.remove());
-
-    calendar
-      .getEventSources()
-      .forEach((s) =>
-        s.internalEventSource.meta.length === 0 ? s.remove() : s
-      );
     calendar.addEventSource(plannedWorkouts);
   }, [plannedWorkouts]);
 
@@ -38,12 +33,76 @@ function Calendar() {
     dispatch({
       type: 'SET_PLANNED_WORKOUTS',
       payload: {
-        id: eventInfo.draggedEl.getAttribute('id'),
+        id: uuid(),
         title: eventInfo.draggedEl.getAttribute('title'),
         color: eventInfo.draggedEl.style.backgroundColor,
         start: eventInfo.event.start,
         allDay: true,
+        completed: false,
+        initialColor: eventInfo.draggedEl.style.backgroundColor,
       },
+    });
+  };
+
+  const handleEventDrop = (eventInfo) => {
+    dispatch({
+      type: 'SET_PLANNED_WORKOUTS',
+      payload: {
+        id: eventInfo.event.id,
+        title: eventInfo.event.title,
+        color: eventInfo.event.backgroundColor,
+        start: eventInfo.event.start,
+        allDay: true,
+        completed: false,
+      },
+    });
+  };
+
+  const handleEventChange = (changeInfo) => {
+    dispatch({
+      type: 'CHANGE_WORKOUT_DATE',
+      payload: changeInfo.event.id,
+    });
+  };
+  const handleEventMouseEnter = (mouseEnterInfo) => {
+    const rect = mouseEnterInfo.el.getBoundingClientRect();
+    setPosition({
+      x: rect.x,
+      y: rect.y - rect.height * 3.3,
+      width: rect.width,
+    });
+    setEvent({
+      id: mouseEnterInfo.event.id,
+      completed: mouseEnterInfo.event.extendedProps.completed,
+      initialColor: mouseEnterInfo.event.extendedProps.initialColor,
+    });
+  };
+  const handleEventMouseLeave = () => {
+    setShowModal(false);
+  };
+
+  const handleEventClick = () => {
+    setShowModal(true);
+  };
+
+  const onMouseOver = () => {
+    setShowModal(true);
+  };
+  const onMouseLeave = () => {
+    setShowModal(false);
+  };
+
+  const onDelete = () => {
+    const calendar = fullCalendarRef.current.getApi();
+    calendar.getEventById(event.id).remove();
+    setShowModal(false);
+    dispatch({ type: 'DELETE_PLANNED_WORKOUT', payload: event.id });
+  };
+  const toggleComplete = (event) => {
+    toggleCompleted(event);
+    setEvent({
+      ...event,
+      completed: !event.completed,
     });
   };
 
@@ -59,6 +118,15 @@ function Calendar() {
       >
         CLEAR PLANNED WORKOUTS
       </div>
+      <Modal
+        position={position}
+        showModal={showModal}
+        onMouseOver={onMouseOver}
+        onMouseLeave={onMouseLeave}
+        onDelete={onDelete}
+        setComplete={() => toggleComplete(event)}
+        eventCompleted={event.completed}
+      />
       <div className="grid grid-cols-5 gap-y-2 mb-5" id="external-events">
         {workouts &&
           workouts.map((workout, index) => (
@@ -70,8 +138,15 @@ function Calendar() {
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         droppable
+        editable
+        eventTextColor="rgb(51, 60, 77)"
         eventSources={plannedWorkouts && plannedWorkouts}
         eventReceive={handleEventReceive}
+        eventDrop={handleEventDrop}
+        eventChange={handleEventChange}
+        eventClick={handleEventClick}
+        eventMouseEnter={handleEventMouseEnter}
+        eventMouseLeave={handleEventMouseLeave}
       />
     </>
   );

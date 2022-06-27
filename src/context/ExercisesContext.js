@@ -40,9 +40,29 @@ export const ExercisesProvider = ({ children }) => {
     }
   };
 
-  const latestFavorites = useRef([]);
+  //for the events in calendar
+  const toggleCompleted = (event) => {
+    if (!event.completed)
+      dispatch({
+        type: 'MARK_COMPLETED',
+        payload: {
+          id: event.id,
+          color: 'rgb(102, 204, 138)',
+        },
+      });
+    if (event.completed)
+      dispatch({
+        type: 'MARK_UNCOMPLETED',
+        payload: {
+          id: event.id,
+          color: event.initialColor,
+        },
+      });
+  };
 
   //display exercises according to the chosen categories
+  const latestFavorites = useRef([]);
+
   const fetchExercises = async (bodyPart, muscle, equipment) => {
     try {
       const res = await fetch('/exercises.json');
@@ -98,6 +118,7 @@ export const ExercisesProvider = ({ children }) => {
       value={{
         fetchExercises,
         toggleFavorite,
+        toggleCompleted,
         ...state,
         dispatch,
       }}
