@@ -108,6 +108,20 @@ const exercisesReducer = (state, action) => {
             : workout;
         }),
       };
+    case 'CHANGE_WORKOUT_NAME':
+      return {
+        ...state,
+        workouts: state.workouts.map((workout) => {
+          return workout.id === action.payload.id
+            ? { ...workout, name: action.payload.name }
+            : workout;
+        }),
+        plannedWorkouts: state.plannedWorkouts.map((workout) => {
+          return workout.initialId === action.payload.id
+            ? { ...workout, title: action.payload.name }
+            : workout;
+        }),
+      };
     case 'DELETE_WORKOUT':
       return {
         ...state,
@@ -136,18 +150,6 @@ const exercisesReducer = (state, action) => {
                 exercises: workout.exercises.filter(
                   (ex) => ex.name !== action.payload.exercise.name
                 ),
-              }
-            : workout;
-        }),
-      };
-    case 'CHANGE_WORKOUT_NAME':
-      return {
-        ...state,
-        workouts: state.workouts.map((workout) => {
-          return workout.id === action.payload.workout.id
-            ? {
-                ...workout,
-                name: action.payload.name,
               }
             : workout;
         }),
@@ -196,6 +198,11 @@ const exercisesReducer = (state, action) => {
       return {
         ...state,
         plannedWorkouts: [],
+      };
+    case 'SET_PERIOD':
+      return {
+        ...state,
+        period: action.payload,
       };
   }
 };

@@ -7,17 +7,13 @@ import { ReactComponent as EditIcon } from '../../../assets/svg/editIcon.svg';
 import Alert from '../../Alert';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useUpdateData } from '../../../hooks/useUpdateData.js';
-import { v4 as uuid } from 'uuid';
 
 function MyWorkouts() {
   const { workouts, plannedWorkouts, dispatch } = useContext(ExercisesContext);
-  const uniqueId = uuid();
 
   const [showAlert, setShowAlert] = useState(false);
   const [editWorkout, setEditWorkout] = useState(false);
   const [workoutId, setWorkoutId] = useState('');
-  const [newWorkoutName, setNewWorkoutName] = useState('');
-  const [isChanged, setIsChanged] = useState(false);
 
   const { loggedIn } = useAuthStatus();
   const { updateWorkouts, updatePlannedWorkouts } = useUpdateData();
@@ -35,6 +31,8 @@ function MyWorkouts() {
     }
   };
 
+  console.log(workouts);
+
   useEffect(() => {
     updateWorkouts();
   }, [workouts, loggedIn]);
@@ -47,24 +45,22 @@ function MyWorkouts() {
     setEditWorkout(true);
   };
 
-  const onChange = (e) => {
+  const onChange = (e, workout) => {
     if (e.target.defaultValue !== '' && e.target.value === '')
-      setNewWorkoutName(e.target.defaultValue);
-
-    if (e.target.value !== '') {
-      setNewWorkoutName(e.target.value);
-      setIsChanged(true);
-    }
-  };
-
-  const saveWorkout = (workout) => {
-    setEditWorkout(false);
-    if (isChanged)
       dispatch({
         type: 'CHANGE_WORKOUT_NAME',
-        payload: { workout: workout, name: newWorkoutName, id: uniqueId },
+        payload: { id: workout.id, name: e.target.defaultValue },
       });
-    setIsChanged(false);
+
+    if (e.target.value !== '')
+      dispatch({
+        type: 'CHANGE_WORKOUT_NAME',
+        payload: { id: workout.id, name: e.target.value },
+      });
+  };
+
+  const saveWorkout = () => {
+    setEditWorkout(false);
   };
 
   return (
@@ -98,9 +94,9 @@ function MyWorkouts() {
                 <WorkoutCard
                   workout={workout}
                   workoutId={workoutId}
-                  saveWorkout={() => saveWorkout(workout)}
+                  saveWorkout={saveWorkout}
                   editWorkout={editWorkout}
-                  onChange={onChange}
+                  onChange={(e) => onChange(e, workout)}
                 />
 
                 <div className="flex gap-3">

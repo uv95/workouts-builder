@@ -12,6 +12,7 @@ export const ExercisesProvider = ({ children }) => {
     workouts: [],
     plannedWorkouts: [],
     showNewWorkout: false,
+    period: 'This month', //for statistics
   };
 
   const [state, dispatch] = useReducer(exercisesReducer, initialState);

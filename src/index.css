@@ -56,3 +56,51 @@
     opacity: 0;
   }
 }
+
+/* Small Calendar */
+
+.smallCalendar .fc {
+  height: 10rem;
+  width: 10rem;
+  font-size: 0.6rem;
+}
+
+.smallCalendar .fc .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
+  height: 1.1rem;
+  overflow: hidden;
+}
+.smallCalendar
+  .fc
+  .fc-view-harness
+  .fc-scrollgrid-section.fc-scrollgrid-section-header {
+  display: none;
+}
+
+.smallCalendar .fc .fc-header-toolbar.fc-toolbar {
+  margin-bottom: 0.3rem;
+}
+.smallCalendar
+  .fc
+  .fc-daygrid-day.fc-day.fc-day-sun.fc-day-past.fc-day-other
+  .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
+  width: 0.1rem;
+}
+.smallCalendar .fc .fc-toolbar-title {
+  font-size: 0.75rem;
+}
+.smallCalendar .fc .fc-today-button {
+  display: none;
+}
+
+.smallCalendar .fc .fc-button-group .fc-prev-button,
+.smallCalendar .fc .fc-button-group .fc-next-button {
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.smallCalendar .fc .fc-button-group .fc-icon,
+.smallCalendar .fc .fc-button-group .fc-icon {
+  font-size: 0.5rem;
+}

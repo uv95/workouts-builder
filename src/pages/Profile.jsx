@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Favorites from '../components/profile/Favorites';
 import Calendar from '../components/profile/calendar/Calendar';
-import Statistics from '../components/profile/Statistics';
+import Statistics from '../components/profile/statistics/Statistics';
 import Measurements from '../components/profile/Measurements';
 import Settings from '../components/profile/Settings';
 import ProfileWrapper from '../components/profile/shared/ProfileWrapper';
