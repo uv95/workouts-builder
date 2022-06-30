@@ -41,6 +41,7 @@ function Calendar() {
         completed: false,
         initialColor: eventInfo.draggedEl.style.backgroundColor,
         initialId: eventInfo.event.id,
+        exercises: eventInfo.event.extendedProps.exercises,
       },
     });
   };
@@ -57,6 +58,7 @@ function Calendar() {
         completed: false,
         initialColor: eventInfo.event.extendedProps.initialColor,
         initialId: eventInfo.event.extendedProps.initialId,
+        exercises: eventInfo.event.extendedProps.exercises,
       },
     });
   };

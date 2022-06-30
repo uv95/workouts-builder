@@ -202,7 +202,13 @@ const exercisesReducer = (state, action) => {
     case 'SET_PERIOD':
       return {
         ...state,
-        period: action.payload,
+        period: {
+          ...state.period,
+          [action.payload.type]: {
+            text: action.payload.text,
+            number: action.payload.number,
+          },
+        },
       };
   }
 };

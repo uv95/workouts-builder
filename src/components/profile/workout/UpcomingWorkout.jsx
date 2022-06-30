@@ -26,8 +26,7 @@ function UpcomingWorkout() {
         name: upcomingWorkoutFullInfo?.name,
       });
     };
-    getUpcomingWorkout();
-    console.log(workouts);
+    plannedWorkouts.length !== 0 && getUpcomingWorkout();
   }, [plannedWorkouts, workouts]);
 
   useEffect(() => {
@@ -60,19 +59,15 @@ function UpcomingWorkout() {
     getDate();
   }, [upcomingWorkout, loading]);
 
-  console.log(upcomingWorkout, 'upcomingWorkout');
   if (loading && plannedWorkouts.length !== 0) return <Spinner />;
 
   if (plannedWorkouts.length === 0 || !upcomingWorkout) return;
 
   return (
-    <>
-      <p className="text-4xl">Upcoming workout</p>
-      <div className="my-7">
-        <p className="text-2xl mb-2">{date}</p>
-        {upcomingWorkout && <WorkoutCard workout={upcomingWorkout} upcoming />}
-      </div>
-    </>
+    <div className="mb-7">
+      <p className="text-xl mb-2 ml-2">{date}</p>
+      {upcomingWorkout && <WorkoutCard workout={upcomingWorkout} upcoming />}
+    </div>
   );
 }
 

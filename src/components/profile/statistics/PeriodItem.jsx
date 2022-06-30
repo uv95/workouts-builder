@@ -8,7 +8,6 @@ function PeriodItem({ text, onClick }) {
   return (
     <p
       onClick={onClick}
-      // onClick={onClick}
       className="cursor-pointer px-2"
       style={{
         backgroundColor: setBackgroundColor(),

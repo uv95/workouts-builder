@@ -3,6 +3,7 @@ import { Draggable } from '@fullcalendar/interaction';
 
 function ExternalEvents({ workout, index }) {
   const eventsRef = useRef(null);
+  const [exercises, setExercises] = useState(workout.exercises);
   const [colors] = useState([
     '#8fd6ff',
     '#f9b6ff',
@@ -21,6 +22,7 @@ function ExternalEvents({ workout, index }) {
           title: workout.getAttribute('title'),
           id: workout.id,
           color: workout.style.backgroundColor,
+          exercises: exercises,
         };
       },
     });

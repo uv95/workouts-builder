@@ -1,47 +1,38 @@
 import React from 'react';
 
-function StatisticsCard({ value, desc }) {
+function StatisticsCard({ value, percentage, difference, weight }) {
   return (
     <>
-      <div className="stats stats-vertical lg:stats-horizontal shadow">
-        <div className="stat flex flex-col items-center w-28">
-          <div className="stat-title">Last month</div>
-          <div className="stat-value flex justify-center">
-            {value.lastMonth}
+      <div className="stats stats-vertical w-52 shadow ">
+        <div className="stat flex justify-between items-center h-16 px-3">
+          <div className="stat-title text-lg">Last month</div>
+          <div className="stat-value text-3xl"> {value.lastMonth}</div>
+        </div>
+
+        <div className="stat flex justify-between items-center h-16 px-3">
+          <div className="stat-title text-lg">This month</div>
+          <div className="flex flex-col items-end">
+            <div className="stat-value text-3xl"> {value.thisMonth}</div>
+            {percentage !== NaN ? (
+              <div className="stat-desc text-2xs">
+                {percentage !== 0 &&
+                  `${percentage > 0 ? '↗︎' : '↘︎'} ${Math.abs(percentage)}% (${
+                    difference > 0 ? '+' : '-'
+                  }${difference})`}
+              </div>
+            ) : (
+              ''
+            )}
           </div>
         </div>
 
-        <div className="stat flex flex-col items-center w-28">
-          <div className="stat-title">This month</div>
-          <div className="stat-value flex justify-center">
-            {value.thisMonth}
+        {!weight && (
+          <div className="stat flex justify-between items-center h-16 px-3">
+            <div className="stat-title text-lg">Total</div>
+            <div className="stat-value text-3xl">{value.total}</div>
           </div>
-          <div className="stat-desc">
-            {desc === 0
-              ? 'Same as last month'
-              : `${desc > 0 ? '↗︎' : '↘︎'} ${Math.abs(desc)}%`}
-          </div>
-        </div>
-
-        <div className="stat flex flex-col items-center w-28">
-          <div className="stat-title flex justify-center">Total</div>
-          <div className="stat-value">{value.total}</div>
-        </div>
+        )}
       </div>
-
-      {/* <div className="stats shadow-md shadow-gray-200 bg-gray-100">
-        <div className="stat">
-          <div className="stat-title">Total Completed Workouts</div>
-          <div className="stat-value">{value}</div>
-          <div className="stat-desc">
-            {desc === 0
-              ? 'Same as last month'
-              : `${Math.abs(desc)}% ${
-                  desc > 0 ? 'more' : 'less'
-                } than last month`}
-          </div>
-        </div>
-      </div> */}
     </>
   );
 }

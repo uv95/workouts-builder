@@ -31,8 +31,6 @@ function MyWorkouts() {
     }
   };
 
-  console.log(workouts);
-
   useEffect(() => {
     updateWorkouts();
   }, [workouts, loggedIn]);
@@ -86,9 +84,10 @@ function MyWorkouts() {
         </div>
       ) : (
         <>
+          <p className="text-3xl mb-6">Upcoming workout</p>
           <UpcomingWorkout />
           <ul>
-            <p className="text-4xl mt-14 mb-7">My workouts</p>
+            <p className="text-3xl mb-6">My workouts</p>
             {workouts.map((workout) => (
               <li key={workout.id} className="flex items-center gap-10 mb-7 ">
                 <WorkoutCard
