@@ -22,7 +22,6 @@ function ExternalEvents({ workout, index }) {
           title: workout.getAttribute('title'),
           id: workout.id,
           color: workout.style.backgroundColor,
-          exercises: exercises,
         };
       },
     });

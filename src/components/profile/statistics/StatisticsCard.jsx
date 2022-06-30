@@ -13,7 +13,7 @@ function StatisticsCard({ value, percentage, difference, weight }) {
           <div className="stat-title text-lg">This month</div>
           <div className="flex flex-col items-end">
             <div className="stat-value text-3xl"> {value.thisMonth}</div>
-            {percentage !== NaN ? (
+            {percentage ? (
               <div className="stat-desc text-2xs">
                 {percentage !== 0 &&
                   `${percentage > 0 ? '↗︎' : '↘︎'} ${Math.abs(percentage)}% (${

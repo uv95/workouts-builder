@@ -16,15 +16,22 @@ function UpcomingWorkout() {
       );
       const today = new Date().setUTCHours(-3, 0, 0, 0);
       const futureEvents = timestamps.filter((t) => t >= today);
+
       const earliestEventIndex = timestamps.indexOf(Math.min(...futureEvents));
-      const upcomingWorkoutFullInfo = workouts.find(
-        (w) => w.id === plannedWorkouts[earliestEventIndex].initialId
-      );
-      setUpcomingWorkout({
-        ...plannedWorkouts[earliestEventIndex],
-        exercises: upcomingWorkoutFullInfo?.exercises,
-        name: upcomingWorkoutFullInfo?.name,
-      });
+
+      if (earliestEventIndex >= 0) {
+        const upcomingWorkoutFullInfo = workouts.find(
+          (w) => w.id === plannedWorkouts[earliestEventIndex]?.initialId
+        );
+
+        setUpcomingWorkout({
+          ...plannedWorkouts[earliestEventIndex],
+          exercises: upcomingWorkoutFullInfo?.exercises,
+          name: upcomingWorkoutFullInfo?.name,
+        });
+      }
+
+      if (futureEvents.length === 0) setUpcomingWorkout(null);
     };
     plannedWorkouts.length !== 0 && getUpcomingWorkout();
   }, [plannedWorkouts, workouts]);
@@ -65,6 +72,8 @@ function UpcomingWorkout() {
 
   return (
     <div className="mb-7">
+      <p className="text-3xl mb-4">Upcoming workout</p>
+
       <p className="text-xl mb-2 ml-2">{date}</p>
       {upcomingWorkout && <WorkoutCard workout={upcomingWorkout} upcoming />}
     </div>

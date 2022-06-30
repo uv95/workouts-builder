@@ -12,7 +12,7 @@ function ProgressBars({ type, months, completedWorkouts }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    completedWorkouts &&
+    if (completedWorkouts.length !== 0) {
       setCompletedWorkoutsWithMonths(
         completedWorkouts.slice().map((w) => {
           return {
@@ -24,34 +24,33 @@ function ProgressBars({ type, months, completedWorkouts }) {
         })
       );
 
+      //Max workouts in a month is for progress bar length
+      function getMostFrequent(arr) {
+        const hashmap = arr.reduce((acc, val) => {
+          acc[val] = (acc[val] || 0) + 1;
+          return acc;
+        }, {});
+        return Object.keys(hashmap).reduce((a, b) =>
+          hashmap[a] > hashmap[b] ? a : b
+        );
+      }
+      getMostFrequent(
+        completedWorkouts.slice().map((w) => new Date(w.start).getMonth())
+      );
+      setMaxCompletedWorkoutsInMonth(
+        completedWorkouts.filter(
+          (w) =>
+            new Date(w.start).getMonth() ===
+            +getMostFrequent(
+              completedWorkouts.slice().map((w) => new Date(w.start).getMonth())
+            )
+        ).length
+      );
+    }
     setMonthsReversed([
       ...months.slice(-period[type.toLowerCase()].number + 1),
       months[0],
     ]);
-
-    //Max workouts in a month is for progress bar length
-    function getMostFrequent(arr) {
-      const hashmap = arr.reduce((acc, val) => {
-        acc[val] = (acc[val] || 0) + 1;
-        return acc;
-      }, {});
-      return Object.keys(hashmap).reduce((a, b) =>
-        hashmap[a] > hashmap[b] ? a : b
-      );
-    }
-    getMostFrequent(
-      completedWorkouts.slice().map((w) => new Date(w.start).getMonth())
-    );
-
-    setMaxCompletedWorkoutsInMonth(
-      completedWorkouts.filter(
-        (w) =>
-          new Date(w.start).getMonth() ===
-          +getMostFrequent(
-            completedWorkouts.slice().map((w) => new Date(w.start).getMonth())
-          )
-      ).length
-    );
     setLoading(false);
   }, [period[type.toLowerCase()].number]);
 
@@ -73,10 +72,10 @@ function ProgressBars({ type, months, completedWorkouts }) {
               style="mb-1"
               value={
                 completedWorkoutsWithMonths.filter((w) => w.month === month)
-                  .length
+                  .length || 0
               }
               month={month}
-              maxWorkoutsInMonth={maxCompletedWorkoutsInMonth}
+              maxWorkoutsInMonth={maxCompletedWorkoutsInMonth || 1}
             />
           ))}
 
@@ -88,10 +87,10 @@ function ProgressBars({ type, months, completedWorkouts }) {
                   key={i}
                   value={
                     completedWorkoutsWithMonths.filter((w) => w.month === month)
-                      .length
+                      .length || 0
                   }
                   month={month}
-                  maxWorkoutsInMonth={maxCompletedWorkoutsInMonth}
+                  maxWorkoutsInMonth={maxCompletedWorkoutsInMonth || 1}
                 />
               ))}
             </div>
@@ -101,10 +100,10 @@ function ProgressBars({ type, months, completedWorkouts }) {
                   key={i}
                   value={
                     completedWorkoutsWithMonths.filter((w) => w.month === month)
-                      .length
+                      .length || 0
                   }
                   month={month}
-                  maxWorkoutsInMonth={maxCompletedWorkoutsInMonth}
+                  maxWorkoutsInMonth={maxCompletedWorkoutsInMonth || 1}
                 />
               ))}
             </div>

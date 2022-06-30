@@ -33,10 +33,6 @@ function ProfileWrapper({ children }) {
     });
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('workouts', JSON.stringify(workouts));
-  }, [workouts]);
-
   return (
     <div className="grid  lg:grid-cols-[300px_1fr] md:grid-cols-[300px_1fr] sm:grid-cols-[230px_1fr] w-full mt-32 grid-rows-[80px_1fr]">
       <div className="h-20">

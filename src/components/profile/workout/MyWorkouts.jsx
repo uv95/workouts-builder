@@ -71,7 +71,7 @@ function MyWorkouts() {
           icon="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       )}
-      {workouts === null || workouts.length === 0 ? (
+      {!workouts || workouts.length === 0 ? (
         <div className="flex justify-between mt-1">
           <p className="text-2xl ">No workouts yet!</p>
           <div
@@ -84,7 +84,6 @@ function MyWorkouts() {
         </div>
       ) : (
         <>
-          <p className="text-3xl mb-6">Upcoming workout</p>
           <UpcomingWorkout />
           <ul>
             <p className="text-3xl mb-6">My workouts</p>
