@@ -7,7 +7,8 @@ import { useUpdateData } from '../../../hooks/useUpdateData.js';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import ExternalEvents from './ExternalEvents';
 import { v4 as uuid } from 'uuid';
-import Modal from './Modal';
+import WorkoutModal from './WorkoutModal';
+import WeightModal from './WeightModal';
 import AddWeight from './AddWeight';
 import Spinner from '../../Spinner';
 
@@ -16,19 +17,27 @@ function Calendar() {
     useContext(ExercisesContext);
   const { loggedIn } = useAuthStatus();
 
-  const [showModal, setShowModal] = useState(false);
+  const [showWeightModal, setShowWeightModal] = useState(false);
+  const [showWorkoutModal, setShowWorkoutModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showAddWeight, setShowAddWeight] = useState(false);
-  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [weightModalPosition, setWeightModalPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [workoutModalPosition, setWorkoutModalPosition] = useState({
+    x: 0,
+    y: 0,
+  });
   const [addWeightPosition, setAddWeightPosition] = useState({
     x: 0,
     y: 0,
   });
   const [eventSources, setEventSources] = useState({
-    plannedWorkouts: { title: '', id: '', events: [] },
-    weight: { title: '', id: '', events: [] },
+    plannedWorkouts: 'plannedWorkouts',
+    weight: 'weight',
   });
-  const [event, setEvent] = useState({ id: '', completed: false });
+  const [event, setEvent] = useState({});
   const [addWeightDate, setAddWeightDate] = useState('');
   const [weightAdded, setWeightAdded] = useState(false);
 
@@ -47,41 +56,8 @@ function Calendar() {
 
     if (calendar) {
       calendar.getEventSources().forEach((e) => e.remove());
-      calendar.addEventSource({
-        events: plannedWorkouts,
-        id: uuid(),
-        title: 'plannedWorkouts',
-      });
-      calendar.addEventSource({ events: weight, id: uuid(), title: 'weight' });
-
-      calendar.getEventSources().forEach((s, i, arr) =>
-        setEventSources({
-          plannedWorkouts:
-            arr[0].internalEventSource.extendedProps.title === 'plannedWorkouts'
-              ? {
-                  title: arr[0].internalEventSource.extendedProps.title,
-                  id: arr[0].id,
-                  events: arr[0].internalEventSource.meta,
-                }
-              : {
-                  title: arr[1].internalEventSource.extendedProps.title,
-                  id: arr[1].id,
-                  events: arr[1].internalEventSource.meta,
-                },
-          weight:
-            arr[0].internalEventSource.extendedProps.title === 'weight'
-              ? {
-                  title: arr[0].internalEventSource.extendedProps.title,
-                  id: arr[0].id,
-                  events: arr[0].internalEventSource.meta,
-                }
-              : {
-                  title: arr[1].internalEventSource.extendedProps.title,
-                  id: arr[1].id,
-                  events: arr[1].internalEventSource.meta,
-                },
-        })
-      );
+      calendar.addEventSource(plannedWorkouts);
+      calendar.addEventSource(weight);
     }
     setLoading(false);
   }, [plannedWorkouts, weight]);
@@ -98,7 +74,7 @@ function Calendar() {
         completed: false,
         initialColor: eventInfo.draggedEl.style.backgroundColor,
         initialId: eventInfo.event.id,
-        source: eventSources.plannedWorkouts.title,
+        source: eventSources.plannedWorkouts,
       },
     });
 
@@ -119,7 +95,7 @@ function Calendar() {
           completed: false,
           initialColor: eventInfo.event.extendedProps.initialColor,
           initialId: eventInfo.event.extendedProps.initialId,
-          source: eventSources.plannedWorkouts.title,
+          source: eventSources.plannedWorkouts,
         },
       });
     }
@@ -132,7 +108,7 @@ function Calendar() {
           id: eventInfo.event.id,
           classNames: ['weight'],
           display: 'block',
-          source: eventSources.weight.title,
+          source: eventSources.weight,
         },
       });
     }
@@ -154,39 +130,69 @@ function Calendar() {
 
   const handleEventMouseEnter = (mouseEnterInfo) => {
     const rect = mouseEnterInfo.el.getBoundingClientRect();
-    setModalPosition({
-      x: rect.x,
-      y: rect.y - rect.height * 3.3,
-      width: rect.width,
-    });
-    setEvent({
-      id: mouseEnterInfo.event.id,
-      completed: mouseEnterInfo.event.extendedProps.completed,
-      initialColor: mouseEnterInfo.event.extendedProps.initialColor,
-    });
+
+    if (mouseEnterInfo.event.extendedProps.source === 'plannedWorkouts')
+      setWorkoutModalPosition({
+        x: rect.x,
+        y: rect.y - rect.height * 3.1,
+        width: rect.width,
+      });
+
+    if (mouseEnterInfo.event.extendedProps.source === 'weight')
+      setWeightModalPosition({
+        x: rect.x - 0.66 * rect.width,
+        y: rect.y - rect.height * 1.8,
+        width: rect.width * 2,
+      });
+    if (mouseEnterInfo.event.extendedProps.source === 'plannedWorkouts')
+      setEvent({
+        id: mouseEnterInfo.event.id,
+        completed: mouseEnterInfo.event.extendedProps.completed,
+        initialColor: mouseEnterInfo.event.extendedProps.initialColor,
+        source: 'plannedWorkouts',
+      });
+    if (mouseEnterInfo.event.extendedProps.source === 'weight')
+      setEvent({ id: mouseEnterInfo.event.id, source: 'weight' });
   };
+
   const handleEventMouseLeave = () => {
-    setShowModal(false);
+    setShowWorkoutModal(false);
+    setShowWeightModal(false);
   };
 
-  const handleEventClick = (e) => {
-    setShowModal(true);
-    console.log(e);
+  const handleEventClick = (clickInfo) => {
+    clickInfo.event.extendedProps.source === 'plannedWorkouts' &&
+      setShowWorkoutModal(true);
+    clickInfo.event.extendedProps.source === 'weight' &&
+      setShowWeightModal(true);
   };
 
-  const onMouseOver = () => {
-    setShowModal(true);
+  const onMouseOverWorkout = () => {
+    setShowWorkoutModal(true);
   };
+  const onMouseOverWeight = () => {
+    setShowWeightModal(true);
+  };
+
   const onMouseLeave = () => {
-    setShowModal(false);
+    setShowWorkoutModal(false);
+    setShowWeightModal(false);
   };
 
   const onDelete = () => {
     const calendar = fullCalendarRef.current.getApi();
-    calendar.getEventById(event.id).remove();
-    setShowModal(false);
-    dispatch({ type: 'DELETE_PLANNED_WORKOUT', payload: event.id });
+    if (event.source === 'plannedWorkouts') {
+      calendar.getEventById(event.id).remove();
+      setShowWorkoutModal(false);
+      dispatch({ type: 'DELETE_PLANNED_WORKOUT', payload: event.id });
+    }
+    if (event.source === 'weight') {
+      calendar.getEventById(event.id).remove();
+      setShowWeightModal(false);
+      dispatch({ type: 'DELETE_WEIGHT', payload: event.id });
+    }
   };
+
   const toggleComplete = (event) => {
     toggleCompleted(event);
     setEvent({
@@ -222,14 +228,22 @@ function Calendar() {
         CLEAR PLANNED WORKOUTS
       </div>
 
-      {showModal && (
-        <Modal
-          position={modalPosition}
-          onMouseOver={onMouseOver}
+      {showWorkoutModal && (
+        <WorkoutModal
+          position={workoutModalPosition}
+          onMouseOver={onMouseOverWorkout}
           onMouseLeave={onMouseLeave}
           onDelete={onDelete}
           setComplete={() => toggleComplete(event)}
           eventCompleted={event.completed}
+        />
+      )}
+      {showWeightModal && (
+        <WeightModal
+          position={weightModalPosition}
+          onMouseOver={onMouseOverWeight}
+          onMouseLeave={onMouseLeave}
+          onDelete={onDelete}
         />
       )}
       {showAddWeight && (
@@ -238,7 +252,7 @@ function Calendar() {
           date={addWeightDate}
           weightAdded={weightAdded}
           setWeightAdded={(e) => setWeightAdded(e)}
-          source={eventSources.weight.title}
+          source={eventSources.weight}
         />
       )}
       <div className="grid grid-cols-5 gap-y-2 mb-5" id="external-events">

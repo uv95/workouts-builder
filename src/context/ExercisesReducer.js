@@ -154,6 +154,11 @@ const exercisesReducer = (state, action) => {
           (workout) => workout.id !== action.payload
         ),
       };
+    case 'DELETE_WEIGHT':
+      return {
+        ...state,
+        weight: state.weight.filter((weight) => weight.id !== action.payload),
+      };
     case 'CHANGE_WORKOUT_DATE':
       const originalEventIndex = state.plannedWorkouts.indexOf(
         state.plannedWorkouts.find((e) => e.id === action.payload)

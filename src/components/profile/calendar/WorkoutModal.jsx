@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Modal({
+function WorkoutModal({
   position,
   onMouseOver,
   onMouseLeave,
@@ -26,7 +26,7 @@ function Modal({
         left: position.x + window.scrollX,
         width: position.width,
       }}
-      className={`absolute z-10 px-3 py-1 text-lg rounded-tl-md rounded-tr-md`}
+      className={`absolute z-10 text-lg py-1 rounded-tl-md rounded-tr-md flex flex-col items-center gap-1`}
     >
       <div
         onClick={setComplete}
@@ -35,14 +35,14 @@ function Modal({
         style={{
           backgroundColor: setBackgroundColor(),
         }}
-        className="cursor-pointer text-base-100 mb-2 rounded h-8 flex justify-center items-center"
+        className="cursor-pointer text-base-100 rounded h-8 flex justify-center items-center w-32"
       >
         <p>{eventCompleted ? 'Uncompleted' : 'Completed'}</p>
       </div>
 
       <div
         onClick={onDelete}
-        className="cursor-pointer text-base-100 bg-accent-focus hover:bg-accent rounded text-center h-8 flex justify-center items-center"
+        className="cursor-pointer text-base-100 bg-accent-focus hover:bg-accent rounded text-center h-8 flex justify-center items-center w-32"
       >
         <p>Delete</p>
       </div>
@@ -50,4 +50,4 @@ function Modal({
   );
 }
 
-export default Modal;
+export default WorkoutModal;

@@ -15,7 +15,8 @@ function AddWeight({ position, date, setWeightAdded, weightAdded, source }) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch({ type: 'SET_WEIGHT', payload: weightEvent });
+    e.target[0].value !== '' &&
+      dispatch({ type: 'SET_WEIGHT', payload: weightEvent });
     setWeightAdded(true);
   };
   const onChange = (e) => {
