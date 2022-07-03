@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ExercisesContext from '../../../context/ExercisesContext';
 
 function ProfileWrapper({ children }) {
-  const { workouts, dispatch, plannedWorkouts } = useContext(ExercisesContext);
+  const { dispatch } = useContext(ExercisesContext);
   const auth = getAuth();
   const navigate = useNavigate();
   const location = useLocation();

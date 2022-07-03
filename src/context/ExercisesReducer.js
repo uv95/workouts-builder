@@ -164,6 +164,16 @@ const exercisesReducer = (state, action) => {
         ...state,
         plannedWorkouts: filteredArray,
       };
+    case 'CHANGE_WEIGHT_DATE':
+      const originalEventIndex2 = state.weight.indexOf(
+        state.weight.find((e) => e.id === action.payload)
+      );
+      const filteredArray2 = state.weight;
+      filteredArray2.splice(originalEventIndex2, 1);
+      return {
+        ...state,
+        weight: filteredArray2,
+      };
     case 'MARK_COMPLETED':
       return {
         ...state,
@@ -186,6 +196,7 @@ const exercisesReducer = (state, action) => {
       return {
         ...state,
         plannedWorkouts: [],
+        weight: [],
       };
     case 'SET_PERIOD':
       return {
@@ -198,7 +209,7 @@ const exercisesReducer = (state, action) => {
           },
         },
       };
-    case 'ADD_WEIGHT':
+    case 'SET_WEIGHT':
       return {
         ...state,
         weight: [...state.weight, action.payload],

@@ -24,6 +24,10 @@ function Calendar() {
     x: 0,
     y: 0,
   });
+  const [eventSources, setEventSources] = useState({
+    plannedWorkouts: { title: '', id: '', events: [] },
+    weight: { title: '', id: '', events: [] },
+  });
   const [event, setEvent] = useState({ id: '', completed: false });
   const [addWeightDate, setAddWeightDate] = useState('');
   const [weightAdded, setWeightAdded] = useState(false);
@@ -43,8 +47,41 @@ function Calendar() {
 
     if (calendar) {
       calendar.getEventSources().forEach((e) => e.remove());
-      calendar.addEventSource(plannedWorkouts);
-      calendar.addEventSource(weight);
+      calendar.addEventSource({
+        events: plannedWorkouts,
+        id: uuid(),
+        title: 'plannedWorkouts',
+      });
+      calendar.addEventSource({ events: weight, id: uuid(), title: 'weight' });
+
+      calendar.getEventSources().forEach((s, i, arr) =>
+        setEventSources({
+          plannedWorkouts:
+            arr[0].internalEventSource.extendedProps.title === 'plannedWorkouts'
+              ? {
+                  title: arr[0].internalEventSource.extendedProps.title,
+                  id: arr[0].id,
+                  events: arr[0].internalEventSource.meta,
+                }
+              : {
+                  title: arr[1].internalEventSource.extendedProps.title,
+                  id: arr[1].id,
+                  events: arr[1].internalEventSource.meta,
+                },
+          weight:
+            arr[0].internalEventSource.extendedProps.title === 'weight'
+              ? {
+                  title: arr[0].internalEventSource.extendedProps.title,
+                  id: arr[0].id,
+                  events: arr[0].internalEventSource.meta,
+                }
+              : {
+                  title: arr[1].internalEventSource.extendedProps.title,
+                  id: arr[1].id,
+                  events: arr[1].internalEventSource.meta,
+                },
+        })
+      );
     }
     setLoading(false);
   }, [plannedWorkouts, weight]);
@@ -61,6 +98,7 @@ function Calendar() {
         completed: false,
         initialColor: eventInfo.draggedEl.style.backgroundColor,
         initialId: eventInfo.event.id,
+        source: eventSources.plannedWorkouts.title,
       },
     });
 
@@ -69,27 +107,51 @@ function Calendar() {
   };
 
   const handleEventDrop = (eventInfo) => {
-    dispatch({
-      type: 'SET_PLANNED_WORKOUTS',
-      payload: {
-        id: eventInfo.event.id,
-        title: eventInfo.event.title,
-        color: eventInfo.event.backgroundColor,
-        start: eventInfo.event.start,
-        allDay: true,
-        completed: false,
-        initialColor: eventInfo.event.extendedProps.initialColor,
-        initialId: eventInfo.event.extendedProps.initialId,
-      },
-    });
+    if (eventInfo.oldEvent.extendedProps.source === 'plannedWorkouts') {
+      dispatch({
+        type: 'SET_PLANNED_WORKOUTS',
+        payload: {
+          id: eventInfo.event.id,
+          title: eventInfo.event.title,
+          color: eventInfo.event.backgroundColor,
+          start: eventInfo.event.start,
+          allDay: true,
+          completed: false,
+          initialColor: eventInfo.event.extendedProps.initialColor,
+          initialId: eventInfo.event.extendedProps.initialId,
+          source: eventSources.plannedWorkouts.title,
+        },
+      });
+    }
+    if (eventInfo.oldEvent.extendedProps.source === 'weight') {
+      dispatch({
+        type: 'SET_WEIGHT',
+        payload: {
+          start: eventInfo.event.start,
+          title: eventInfo.event.title,
+          id: eventInfo.event.id,
+          classNames: ['weight'],
+          display: 'block',
+          source: eventSources.weight.title,
+        },
+      });
+    }
   };
 
+  //change dates of events to prevent doubling
   const handleEventChange = (changeInfo) => {
-    dispatch({
-      type: 'CHANGE_WORKOUT_DATE',
-      payload: changeInfo.event.id,
-    });
+    if (changeInfo.event.extendedProps.source === 'plannedWorkouts')
+      dispatch({
+        type: 'CHANGE_WORKOUT_DATE',
+        payload: changeInfo.event.id,
+      });
+    if (changeInfo.event.extendedProps.source === 'weight')
+      dispatch({
+        type: 'CHANGE_WEIGHT_DATE',
+        payload: changeInfo.event.id,
+      });
   };
+
   const handleEventMouseEnter = (mouseEnterInfo) => {
     const rect = mouseEnterInfo.el.getBoundingClientRect();
     setModalPosition({
@@ -107,8 +169,9 @@ function Calendar() {
     setShowModal(false);
   };
 
-  const handleEventClick = () => {
+  const handleEventClick = (e) => {
     setShowModal(true);
+    console.log(e);
   };
 
   const onMouseOver = () => {
@@ -175,6 +238,7 @@ function Calendar() {
           date={addWeightDate}
           weightAdded={weightAdded}
           setWeightAdded={(e) => setWeightAdded(e)}
+          source={eventSources.weight.title}
         />
       )}
       <div className="grid grid-cols-5 gap-y-2 mb-5" id="external-events">

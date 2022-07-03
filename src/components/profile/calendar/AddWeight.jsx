@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import ExercisesContext from '../../../context/ExercisesContext';
 import { v4 as uuid } from 'uuid';
 
-function AddWeight({ position, date, setWeightAdded, weightAdded }) {
+function AddWeight({ position, date, setWeightAdded, weightAdded, source }) {
   const { dispatch } = useContext(ExercisesContext);
   const [weightEvent, setWeightEvent] = useState({
     start: '',
@@ -10,11 +10,12 @@ function AddWeight({ position, date, setWeightAdded, weightAdded }) {
     id: '',
     classNames: [],
     display: 'block',
+    source: '',
   });
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch({ type: 'ADD_WEIGHT', payload: weightEvent });
+    dispatch({ type: 'SET_WEIGHT', payload: weightEvent });
     setWeightAdded(true);
   };
   const onChange = (e) => {
@@ -24,6 +25,7 @@ function AddWeight({ position, date, setWeightAdded, weightAdded }) {
       id: uuid(),
       classNames: ['weight'],
       display: 'block',
+      source: source,
     });
   };
 
