@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 function Modal({
-  showModal,
   position,
   onMouseOver,
   onMouseLeave,
@@ -19,37 +18,35 @@ function Modal({
   };
 
   return (
-    showModal && (
+    <div
+      onMouseOver={onMouseOver}
+      onMouseLeave={onMouseLeave}
+      style={{
+        top: position.y + window.scrollY,
+        left: position.x + window.scrollX,
+        width: position.width,
+      }}
+      className={`absolute z-10 px-3 py-1 text-lg rounded-tl-md rounded-tr-md`}
+    >
       <div
-        onMouseOver={onMouseOver}
-        onMouseLeave={onMouseLeave}
+        onClick={setComplete}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
         style={{
-          top: position.y + window.scrollY,
-          left: position.x + window.scrollX,
-          width: position.width,
+          backgroundColor: setBackgroundColor(),
         }}
-        className={`absolute z-10 px-3 py-1 text-lg rounded-tl-md rounded-tr-md`}
+        className="cursor-pointer text-base-100 mb-2 rounded h-8 flex justify-center items-center"
       >
-        <div
-          onClick={setComplete}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-          style={{
-            backgroundColor: setBackgroundColor(),
-          }}
-          className="cursor-pointer text-base-100 mb-2 rounded h-8 flex justify-center items-center"
-        >
-          <p>{eventCompleted ? 'Uncompleted' : 'Completed'}</p>
-        </div>
-
-        <div
-          onClick={onDelete}
-          className="cursor-pointer text-base-100 bg-accent-focus hover:bg-accent rounded text-center h-8 flex justify-center items-center"
-        >
-          <p>Delete</p>
-        </div>
+        <p>{eventCompleted ? 'Uncompleted' : 'Completed'}</p>
       </div>
-    )
+
+      <div
+        onClick={onDelete}
+        className="cursor-pointer text-base-100 bg-accent-focus hover:bg-accent rounded text-center h-8 flex justify-center items-center"
+      >
+        <p>Delete</p>
+      </div>
+    </div>
   );
 }
 

@@ -10,32 +10,20 @@ const exercisesReducer = (state, action) => {
         ...state,
         exerciseName: action.payload,
       };
-    case 'RESTORE_FAVORITES_AFTER_RELOADING':
+    case 'RESTORE_DATA':
       return {
         ...state,
-        favorites: action.payload,
-      };
-    case 'RESTORE_WORKOUTS_AFTER_RELOADING':
-      return {
-        ...state,
-        workouts: action.payload,
-      };
-    case 'RESTORE_PLANNED_WORKOUTS_AFTER_RELOADING':
-      return {
-        ...state,
-        plannedWorkouts: action.payload,
-      };
-    case 'RESTORE_SEARCH_RESULTS_AFTER_RELOADING':
-      return {
-        ...state,
+        favorites: action.payload.favorites,
+        workouts: action.payload.workouts,
+        weight: action.payload.weight,
+        plannedWorkouts: action.payload.plannedWorkouts,
         //used in ExerciseItem page to keep favorite property updated after reloading
-        searchResults: action.payload.map((ex) =>
+        searchResults: action.payload.searchResults.map((ex) =>
           state.favorites.some((ex1) => ex1.name === ex.name)
             ? { ...ex, favorite: true }
             : { ...ex, favorite: false }
         ),
       };
-
     case 'MARK_FAVORITE':
       return {
         ...state,
@@ -209,6 +197,11 @@ const exercisesReducer = (state, action) => {
             number: action.payload.number,
           },
         },
+      };
+    case 'ADD_WEIGHT':
+      return {
+        ...state,
+        weight: [...state.weight, action.payload],
       };
   }
 };

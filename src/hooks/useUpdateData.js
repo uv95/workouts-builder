@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { useAuthStatus } from './useAuthStatus.js';
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import ExercisesContext from '../context/ExercisesContext';
 import { getAuth } from 'firebase/auth';
 import { db } from '../firebase.config';
 
 export const useUpdateData = () => {
   const { loggedIn } = useAuthStatus();
-  const { favorites, workouts, plannedWorkouts } = useContext(ExercisesContext);
+  const { favorites, workouts, plannedWorkouts, weight } =
+    useContext(ExercisesContext);
 
   const auth = getAuth();
   const userRef = loggedIn ? doc(db, 'users', auth.currentUser.uid) : null;
@@ -61,6 +62,27 @@ export const useUpdateData = () => {
       update();
     }
   };
+  const updateWeight = () => {
+    if (loggedIn && weight !== null) {
+      localStorage.setItem('weight', JSON.stringify(weight));
 
-  return { updateFavorites, updateWorkouts, updatePlannedWorkouts };
+      // updates user's workouts in cloud firestore
+      const update = async () => {
+        await updateDoc(userRef, {
+          weight: [],
+        });
+        await updateDoc(userRef, {
+          weight: arrayUnion(...weight),
+        });
+      };
+      update();
+    }
+  };
+
+  return {
+    updateFavorites,
+    updateWorkouts,
+    updatePlannedWorkouts,
+    updateWeight,
+  };
 };

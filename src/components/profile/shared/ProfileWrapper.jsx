@@ -14,22 +14,21 @@ function ProfileWrapper({ children }) {
     localStorage.removeItem('favorites');
     localStorage.removeItem('workouts');
     localStorage.removeItem('planned workouts');
+    localStorage.removeItem('weight');
     navigate('/');
   };
 
-  // making sure that the favorites are still there after reloading the page
+  // making sure that all data is still there after reloading the page
   useEffect(() => {
     dispatch({
-      type: 'RESTORE_WORKOUTS_AFTER_RELOADING',
-      payload: JSON.parse(localStorage.getItem('workouts')),
-    });
-    dispatch({
-      type: 'RESTORE_PLANNED_WORKOUTS_AFTER_RELOADING',
-      payload: JSON.parse(localStorage.getItem('planned workouts')),
-    });
-    dispatch({
-      type: 'RESTORE_FAVORITES_AFTER_RELOADING',
-      payload: JSON.parse(localStorage.getItem('favorites')),
+      type: 'RESTORE_DATA',
+      payload: {
+        searchResults: JSON.parse(localStorage.getItem('search results')),
+        favorites: JSON.parse(localStorage.getItem('favorites')),
+        workouts: JSON.parse(localStorage.getItem('workouts')),
+        plannedWorkouts: JSON.parse(localStorage.getItem('planned workouts')),
+        weight: JSON.parse(localStorage.getItem('weight')),
+      },
     });
   }, []);
 

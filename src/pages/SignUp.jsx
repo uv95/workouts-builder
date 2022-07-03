@@ -24,6 +24,7 @@ function SignUp() {
     favorites: [],
     workouts: [],
     plannedWorkouts: [],
+    weight: [],
   });
   const { name, email, password } = formData;
 
@@ -75,6 +76,7 @@ function SignUp() {
           'planned workouts',
           JSON.stringify(userSnap.data().plannedWorkouts)
         );
+        localStorage.setItem('weight', JSON.stringify(userSnap.data().weight));
       } catch (error) {
         console.log(error);
       }

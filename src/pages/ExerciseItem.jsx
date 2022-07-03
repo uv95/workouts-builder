@@ -26,12 +26,13 @@ function ExerciseItem() {
 
   useEffect(() => {
     dispatch({
-      type: 'RESTORE_FAVORITES_AFTER_RELOADING',
-      payload: JSON.parse(localStorage.getItem('favorites')),
-    });
-    dispatch({
-      type: 'RESTORE_SEARCH_RESULTS_AFTER_RELOADING',
-      payload: JSON.parse(localStorage.getItem('search results')),
+      type: 'RESTORE_DATA',
+      payload: {
+        searchResults: JSON.parse(localStorage.getItem('search results')),
+        favorites: JSON.parse(localStorage.getItem('favorites')),
+        workouts: JSON.parse(localStorage.getItem('workouts')),
+        plannedWorkouts: JSON.parse(localStorage.getItem('planned workouts')),
+      },
     });
 
     dispatch({

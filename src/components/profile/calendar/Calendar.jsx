@@ -8,26 +8,46 @@ import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import ExternalEvents from './ExternalEvents';
 import { v4 as uuid } from 'uuid';
 import Modal from './Modal';
+import AddWeight from './AddWeight';
+import Spinner from '../../Spinner';
 
 function Calendar() {
-  const { workouts, plannedWorkouts, dispatch, toggleCompleted } =
+  const { workouts, plannedWorkouts, dispatch, toggleCompleted, weight } =
     useContext(ExercisesContext);
   const { loggedIn } = useAuthStatus();
+
   const [showModal, setShowModal] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [loading, setLoading] = useState(true);
+  const [showAddWeight, setShowAddWeight] = useState(false);
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [addWeightPosition, setAddWeightPosition] = useState({
+    x: 0,
+    y: 0,
+  });
   const [event, setEvent] = useState({ id: '', completed: false });
-  const { updatePlannedWorkouts } = useUpdateData();
+  const [addWeightDate, setAddWeightDate] = useState('');
+  const [weightAdded, setWeightAdded] = useState(false);
+
+  const { updatePlannedWorkouts, updateWeight } = useUpdateData();
   const fullCalendarRef = useRef(null);
 
   useEffect(() => {
     updatePlannedWorkouts();
   }, [plannedWorkouts, loggedIn]);
+  useEffect(() => {
+    updateWeight();
+  }, [weight, loggedIn]);
 
   useEffect(() => {
-    const calendar = fullCalendarRef.current.getApi();
-    calendar.getEvents().forEach((e) => e.remove());
-    calendar.addEventSource(plannedWorkouts);
-  }, [plannedWorkouts]);
+    const calendar = fullCalendarRef.current?.getApi();
+
+    if (calendar) {
+      calendar.getEventSources().forEach((e) => e.remove());
+      calendar.addEventSource(plannedWorkouts);
+      calendar.addEventSource(weight);
+    }
+    setLoading(false);
+  }, [plannedWorkouts, weight]);
 
   const handleEventReceive = (eventInfo) => {
     dispatch({
@@ -43,6 +63,9 @@ function Calendar() {
         initialId: eventInfo.event.id,
       },
     });
+
+    const calendar = fullCalendarRef.current?.getApi();
+    calendar?.getEvents().forEach((e) => e.remove());
   };
 
   const handleEventDrop = (eventInfo) => {
@@ -69,7 +92,7 @@ function Calendar() {
   };
   const handleEventMouseEnter = (mouseEnterInfo) => {
     const rect = mouseEnterInfo.el.getBoundingClientRect();
-    setPosition({
+    setModalPosition({
       x: rect.x,
       y: rect.y - rect.height * 3.3,
       width: rect.width,
@@ -109,6 +132,20 @@ function Calendar() {
     });
   };
 
+  const handleDateClick = (info) => {
+    setShowAddWeight(true);
+    const rect = info.dayEl.getBoundingClientRect();
+    setAddWeightPosition({
+      x: rect.x + 0.1 * rect.width,
+      y: rect.y + 0.7 * rect.height,
+      width: 0.8 * rect.width,
+    });
+    setAddWeightDate(info.date);
+    setWeightAdded(false);
+  };
+
+  if (loading) return <Spinner />;
+
   return (
     <>
       <div
@@ -121,15 +158,25 @@ function Calendar() {
       >
         CLEAR PLANNED WORKOUTS
       </div>
-      <Modal
-        position={position}
-        showModal={showModal}
-        onMouseOver={onMouseOver}
-        onMouseLeave={onMouseLeave}
-        onDelete={onDelete}
-        setComplete={() => toggleComplete(event)}
-        eventCompleted={event.completed}
-      />
+
+      {showModal && (
+        <Modal
+          position={modalPosition}
+          onMouseOver={onMouseOver}
+          onMouseLeave={onMouseLeave}
+          onDelete={onDelete}
+          setComplete={() => toggleComplete(event)}
+          eventCompleted={event.completed}
+        />
+      )}
+      {showAddWeight && (
+        <AddWeight
+          position={addWeightPosition}
+          date={addWeightDate}
+          weightAdded={weightAdded}
+          setWeightAdded={(e) => setWeightAdded(e)}
+        />
+      )}
       <div className="grid grid-cols-5 gap-y-2 mb-5" id="external-events">
         {workouts &&
           workouts.map((workout, index) => (
@@ -143,13 +190,14 @@ function Calendar() {
         droppable
         editable
         eventTextColor="rgb(51, 60, 77)"
-        eventSources={plannedWorkouts && plannedWorkouts}
+        eventSources={[plannedWorkouts, weight]}
         eventReceive={handleEventReceive}
         eventDrop={handleEventDrop}
         eventChange={handleEventChange}
         eventClick={handleEventClick}
         eventMouseEnter={handleEventMouseEnter}
         eventMouseLeave={handleEventMouseLeave}
+        dateClick={handleDateClick}
       />
     </>
   );

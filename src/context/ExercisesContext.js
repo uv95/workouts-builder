@@ -16,6 +16,7 @@ export const ExercisesProvider = ({ children }) => {
       workouts: { text: '3 months', number: 3 }, //for statistics
       weight: { text: '3 months', number: 3 },
     },
+    weight: [],
   };
 
   const [state, dispatch] = useReducer(exercisesReducer, initialState);
@@ -96,8 +97,14 @@ export const ExercisesProvider = ({ children }) => {
       });
 
       dispatch({
-        type: 'RESTORE_FAVORITES_AFTER_RELOADING',
-        payload: JSON.parse(localStorage.getItem('favorites')),
+        type: 'RESTORE_DATA',
+        payload: {
+          searchResults: JSON.parse(localStorage.getItem('search results')),
+          favorites: JSON.parse(localStorage.getItem('favorites')),
+          workouts: JSON.parse(localStorage.getItem('workouts')),
+          plannedWorkouts: JSON.parse(localStorage.getItem('planned workouts')),
+          weight: JSON.parse(localStorage.getItem('weight')),
+        },
       });
 
       // if there are already exercises marked as favorite (in localStorage) -> they should be displayed as favorite in new search results
