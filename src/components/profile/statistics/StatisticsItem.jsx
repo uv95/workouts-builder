@@ -2,13 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import StatisticsCard from './StatisticsCard';
 import Progress from './Progress';
 import ExercisesContext from '../../../context/ExercisesContext';
-import Spinner from '../../Spinner';
 
-function StatisticsItem({ value, percentage, difference, type }) {
+function StatisticsItem({ value, percents, difference, type }) {
   const { plannedWorkouts } = useContext(ExercisesContext);
   const [showPeriod, setShowPeriod] = useState(false);
   const [completedWorkouts, setCompletedWorkouts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [monthsFromNow, setMonthsFromNow] = useState([]);
   const [allMonths] = useState([
     'Jan',
@@ -26,23 +24,24 @@ function StatisticsItem({ value, percentage, difference, type }) {
   ]);
 
   useEffect(() => {
-    const todayMonth = new Date().getMonth();
+    const thisMonth = new Date().getMonth();
     setCompletedWorkouts(plannedWorkouts.filter((w) => w.completed));
     setMonthsFromNow([
-      ...allMonths.slice(todayMonth),
-      ...allMonths.slice(0, todayMonth),
+      ...allMonths.slice(thisMonth),
+      ...allMonths.slice(0, thisMonth),
     ]);
-    setLoading(false);
-  }, []);
+  }, [plannedWorkouts]);
 
-  if (loading) return <Spinner />;
   return (
     <>
       <div className="flex flex-col gap-5">
-        <p className="text-3xl">{type}</p>
+        <p className="text-3xl">
+          {type}
+          {type === 'Weight' && ' (kg)'}
+        </p>
         <StatisticsCard
           value={value}
-          percentage={percentage}
+          percents={percents}
           difference={difference}
           weight={type === 'Weight'}
         />

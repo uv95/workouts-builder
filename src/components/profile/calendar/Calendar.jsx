@@ -70,6 +70,9 @@ function Calendar() {
         title: eventInfo.draggedEl.getAttribute('title'),
         color: eventInfo.draggedEl.style.backgroundColor,
         start: eventInfo.event.start,
+        month: new Date(eventInfo.event.start).toLocaleString('default', {
+          month: 'short',
+        }),
         allDay: true,
         completed: false,
         initialColor: eventInfo.draggedEl.style.backgroundColor,
@@ -91,8 +94,11 @@ function Calendar() {
           title: eventInfo.event.title,
           color: eventInfo.event.backgroundColor,
           start: eventInfo.event.start,
+          month: new Date(eventInfo.event.start).toLocaleString('default', {
+            month: 'short',
+          }),
           allDay: true,
-          completed: false,
+          completed: eventInfo.event.extendedProps.completed,
           initialColor: eventInfo.event.extendedProps.initialColor,
           initialId: eventInfo.event.extendedProps.initialId,
           source: eventSources.plannedWorkouts,
@@ -104,7 +110,11 @@ function Calendar() {
         type: 'SET_WEIGHT',
         payload: {
           start: eventInfo.event.start,
+          month: new Date(eventInfo.event.start).toLocaleString('default', {
+            month: 'short',
+          }),
           title: eventInfo.event.title,
+          number: parseFloat(eventInfo.event.title),
           id: eventInfo.event.id,
           classNames: ['weight'],
           display: 'block',
@@ -126,6 +136,8 @@ function Calendar() {
         type: 'CHANGE_WEIGHT_DATE',
         payload: changeInfo.event.id,
       });
+
+    console.log(changeInfo);
   };
 
   const handleEventMouseEnter = (mouseEnterInfo) => {

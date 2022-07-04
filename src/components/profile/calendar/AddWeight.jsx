@@ -6,7 +6,9 @@ function AddWeight({ position, date, setWeightAdded, weightAdded, source }) {
   const { dispatch } = useContext(ExercisesContext);
   const [weightEvent, setWeightEvent] = useState({
     start: '',
+    month: '',
     title: '',
+    number: 0,
     id: '',
     classNames: [],
     display: 'block',
@@ -22,7 +24,11 @@ function AddWeight({ position, date, setWeightAdded, weightAdded, source }) {
   const onChange = (e) => {
     setWeightEvent({
       start: date,
+      month: new Date(date).toLocaleString('default', {
+        month: 'short',
+      }),
       title: e.target.value + ' kg',
+      number: +e.target.value,
       id: uuid(),
       classNames: ['weight'],
       display: 'block',
@@ -50,6 +56,7 @@ function AddWeight({ position, date, setWeightAdded, weightAdded, source }) {
             <input
               onChange={onChange}
               type="number"
+              step="0.1"
               placeholder="Weight"
               className="input px-2"
             />

@@ -3,28 +3,29 @@ import ExercisesContext from '../../../context/ExercisesContext';
 import ProgressBar from './ProgressBar';
 
 function ProgressBars({ type, months, completedWorkouts }) {
-  const { period } = useContext(ExercisesContext);
+  const { period, weight } = useContext(ExercisesContext);
   const [monthsReversed, setMonthsReversed] = useState([]);
-  const [completedWorkoutsWithMonths, setCompletedWorkoutsWithMonths] =
-    useState([]);
-  const [maxCompletedWorkoutsInMonth, setMaxCompletedWorkoutsInMonth] =
-    useState(0);
-  const [loading, setLoading] = useState(true);
+  const [maxCompletedWorkouts, setMaxCompletedWorkouts] = useState(0);
+  const [maxLastAddedWeight, setMaxLastAddedWeight] = useState(0);
 
   useEffect(() => {
     if (completedWorkouts.length !== 0) {
-      setCompletedWorkoutsWithMonths(
-        completedWorkouts.slice().map((w) => {
-          return {
-            ...w,
-            month: new Date(w.start).toLocaleString('default', {
-              month: 'short',
-            }),
-          };
-        })
-      );
+      // SET PROGRESS BAR LENGTH:
+      // 1) get all workouts for a certain period of time
+      const workoutsIn3Months = [
+        ...completedWorkouts.filter((w) => w.month === months[0]),
+        ...completedWorkouts.filter((w) =>
+          months.slice(-2).some((m) => m === w.month)
+        ),
+      ];
+      const workoutsIn6Months = [
+        ...completedWorkouts.filter((w) => w.month === months[0]),
+        ...completedWorkouts.filter((w) =>
+          months.slice(-5).some((m) => m === w.month)
+        ),
+      ];
 
-      //Max workouts in a month is for progress bar length
+      // 2) function to get most repeated element in array
       function getMostFrequent(arr) {
         const hashmap = arr.reduce((acc, val) => {
           acc[val] = (acc[val] || 0) + 1;
@@ -34,27 +35,75 @@ function ProgressBars({ type, months, completedWorkouts }) {
           hashmap[a] > hashmap[b] ? a : b
         );
       }
-      getMostFrequent(
-        completedWorkouts.slice().map((w) => new Date(w.start).getMonth())
-      );
-      setMaxCompletedWorkoutsInMonth(
-        completedWorkouts.filter(
-          (w) =>
-            new Date(w.start).getMonth() ===
-            +getMostFrequent(
-              completedWorkouts.slice().map((w) => new Date(w.start).getMonth())
+
+      // 3) get month with most workouts in a certain period of time
+
+      const maxWorkoutsIn3Months = workoutsIn3Months.filter(
+        (w) =>
+          new Date(w.start).getMonth() ===
+          +getMostFrequent(
+            workoutsIn3Months.slice().map((w) => new Date(w.start).getMonth())
+          )
+      ).length;
+      const maxWorkoutsIn6Months = workoutsIn6Months.filter(
+        (w) =>
+          new Date(w.start).getMonth() ===
+          +getMostFrequent(
+            workoutsIn6Months.slice().map((w) => new Date(w.start).getMonth())
+          )
+      ).length;
+      const maxWorkoutsInYear = completedWorkouts.filter(
+        (w) =>
+          new Date(w.start).getMonth() ===
+          +getMostFrequent(
+            completedWorkouts.slice().map((w) => new Date(w.start).getMonth())
+          )
+      ).length;
+
+      // 4) function to get max last added weight in certain period of time
+      const getMaxAddedWeight = (months) => {
+        return Math.max(
+          ...months
+            .slice()
+            .map(
+              (m) =>
+                weight
+                  .filter((w) => w.month === m)
+                  .sort(
+                    (a, b) =>
+                      new Date(b.start).getDate() - new Date(a.start).getDate()
+                  )[0]?.number || 0
             )
-        ).length
-      );
+        );
+      };
+
+      // 5) set max values to define the progress bar length
+      if (period[type.toLowerCase()].number === 3) {
+        setMaxCompletedWorkouts(maxWorkoutsIn3Months);
+        setMaxLastAddedWeight(
+          getMaxAddedWeight([months[0], ...months.slice(-2)])
+        );
+      }
+      if (period[type.toLowerCase()].number === 6) {
+        setMaxCompletedWorkouts(maxWorkoutsIn6Months);
+        setMaxLastAddedWeight(
+          getMaxAddedWeight([months[0], ...months.slice(-5)])
+        );
+      }
+      if (period[type.toLowerCase()].number === 12) {
+        setMaxCompletedWorkouts(maxWorkoutsInYear);
+        setMaxLastAddedWeight(getMaxAddedWeight(months));
+      }
     }
+
+    ////////////////////
+
     setMonthsReversed([
       ...months.slice(-period[type.toLowerCase()].number + 1),
       months[0],
     ]);
-    setLoading(false);
-  }, [period[type.toLowerCase()].number]);
+  }, [period, completedWorkouts, weight, months]);
 
-  if (loading) return;
   return (
     <div
       className={`${
@@ -70,12 +119,21 @@ function ProgressBars({ type, months, completedWorkouts }) {
             <ProgressBar
               key={i}
               style="mb-1"
-              value={
-                completedWorkoutsWithMonths.filter((w) => w.month === month)
-                  .length || 0
+              workoutsValue={
+                completedWorkouts.filter((w) => w.month === month).length || 0
               }
+              weightValue={
+                weight
+                  .filter((w) => w.month === month)
+                  .sort(
+                    (a, b) =>
+                      new Date(b.start).getDate() - new Date(a.start).getDate()
+                  )[0]?.number || 0
+              }
+              type={type}
               month={month}
-              maxWorkoutsInMonth={maxCompletedWorkoutsInMonth || 1}
+              maxWorkouts={maxCompletedWorkouts || 1}
+              maxWeight={maxLastAddedWeight || 1}
             />
           ))}
 
@@ -85,12 +143,23 @@ function ProgressBars({ type, months, completedWorkouts }) {
               {monthsReversed.slice(0, 6).map((month, i) => (
                 <ProgressBar
                   key={i}
-                  value={
-                    completedWorkoutsWithMonths.filter((w) => w.month === month)
-                      .length || 0
+                  workoutsValue={
+                    completedWorkouts.filter((w) => w.month === month).length ||
+                    0
                   }
+                  weightValue={
+                    weight
+                      .filter((w) => w.month === month)
+                      .sort(
+                        (a, b) =>
+                          new Date(b.start).getDate() -
+                          new Date(a.start).getDate()
+                      )[0]?.number || 0
+                  }
+                  type={type}
                   month={month}
-                  maxWorkoutsInMonth={maxCompletedWorkoutsInMonth || 1}
+                  maxWorkouts={maxCompletedWorkouts || 1}
+                  maxWeight={maxLastAddedWeight || 1}
                 />
               ))}
             </div>
@@ -98,12 +167,23 @@ function ProgressBars({ type, months, completedWorkouts }) {
               {monthsReversed.slice(6, 12).map((month, i) => (
                 <ProgressBar
                   key={i}
-                  value={
-                    completedWorkoutsWithMonths.filter((w) => w.month === month)
-                      .length || 0
+                  workoutsValue={
+                    completedWorkouts.filter((w) => w.month === month).length ||
+                    0
                   }
+                  weightValue={
+                    weight
+                      .filter((w) => w.month === month)
+                      .sort(
+                        (a, b) =>
+                          new Date(b.start).getDate() -
+                          new Date(a.start).getDate()
+                      )[0]?.number || 0
+                  }
+                  type={type}
                   month={month}
-                  maxWorkoutsInMonth={maxCompletedWorkoutsInMonth || 1}
+                  maxWorkouts={maxCompletedWorkouts || 1}
+                  maxWeight={maxLastAddedWeight || 1}
                 />
               ))}
             </div>
