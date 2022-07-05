@@ -45,7 +45,7 @@ function Exercises() {
     <>
       <Breadcrumbs index={-3} path="fromExercises" />
 
-      <div className="mt-4 w-3/4 flex justify-between">
+      <div className="my-4 w-3/4 flex justify-between h-full">
         <div>
           <p className="text-3xl mb-8 font-bold">Body part</p>
 

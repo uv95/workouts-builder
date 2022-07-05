@@ -16,7 +16,6 @@ function ExerciseCard({ ex, small }) {
       navigate(`${ex.name.replaceAll(' ', '_').toLowerCase()}`);
     }
   };
-
   return (
     <div
       onClick={onClick}

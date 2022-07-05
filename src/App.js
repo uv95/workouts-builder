@@ -14,15 +14,16 @@ import { ExercisesProvider } from './context/ExercisesContext';
 import PrivateRoute from './components/PrivateRoute';
 import ForgotPassword from './pages/ForgotPassword';
 import WorkoutItem from './components/profile/workout/WorkoutItem';
+import Footer from './components/Footer';
 
 function App() {
   return (
     <ExercisesProvider>
       <DndProvider backend={HTML5Backend}>
         <Router>
-          <div className="h-screen">
+          <div className="relative">
             <Navbar />
-            <main className="container mx-auto flex flex-col items-center justify-center gap-6">
+            <main className="container mx-auto flex flex-col items-center gap-6 min-h-screen pb-32">
               <Routes>
                 <Route path="/" element={<Hero />} />
                 <Route path="/exercises" element={<Exercises />} />
@@ -51,6 +52,7 @@ function App() {
                 />
               </Routes>
             </main>
+            <Footer />
           </div>
         </Router>
       </DndProvider>

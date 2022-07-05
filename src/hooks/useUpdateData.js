@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useAuthStatus } from './useAuthStatus.js';
-import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import ExercisesContext from '../context/ExercisesContext';
 import { getAuth } from 'firebase/auth';
 import { db } from '../firebase.config';

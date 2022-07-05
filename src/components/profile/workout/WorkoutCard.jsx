@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ExercisesContext from '../../../context/ExercisesContext';
+import Spinner from '../../Spinner';
 
 function WorkoutCard({
   editWorkout,
@@ -11,6 +12,7 @@ function WorkoutCard({
   upcoming,
 }) {
   const { dispatch } = useContext(ExercisesContext);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -21,6 +23,12 @@ function WorkoutCard({
     });
   };
 
+  useEffect(() => {
+    setLoading(false);
+    console.log('hlhlhl', workout);
+  }, [workout]);
+
+  if (loading) return <Spinner />;
   return (
     <div
       onClick={() =>

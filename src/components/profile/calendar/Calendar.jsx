@@ -4,7 +4,6 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useUpdateData } from '../../../hooks/useUpdateData.js';
-import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import ExternalEvents from './ExternalEvents';
 import { v4 as uuid } from 'uuid';
 import WorkoutModal from './WorkoutModal';
@@ -15,7 +14,6 @@ import Spinner from '../../Spinner';
 function Calendar() {
   const { workouts, plannedWorkouts, dispatch, toggleCompleted, weight } =
     useContext(ExercisesContext);
-  const { loggedIn } = useAuthStatus();
 
   const [showWeightModal, setShowWeightModal] = useState(false);
   const [showWorkoutModal, setShowWorkoutModal] = useState(false);
@@ -33,7 +31,7 @@ function Calendar() {
     x: 0,
     y: 0,
   });
-  const [eventSources, setEventSources] = useState({
+  const [eventSources] = useState({
     plannedWorkouts: 'plannedWorkouts',
     weight: 'weight',
   });
@@ -46,10 +44,10 @@ function Calendar() {
 
   useEffect(() => {
     updatePlannedWorkouts();
-  }, [plannedWorkouts, loggedIn]);
+  }, [plannedWorkouts]);
   useEffect(() => {
     updateWeight();
-  }, [weight, loggedIn]);
+  }, [weight]);
 
   useEffect(() => {
     const calendar = fullCalendarRef.current?.getApi();
@@ -136,8 +134,6 @@ function Calendar() {
         type: 'CHANGE_WEIGHT_DATE',
         payload: changeInfo.event.id,
       });
-
-    console.log(changeInfo);
   };
 
   const handleEventMouseEnter = (mouseEnterInfo) => {
@@ -214,30 +210,32 @@ function Calendar() {
   };
 
   const handleDateClick = (info) => {
-    setShowAddWeight(true);
-    const rect = info.dayEl.getBoundingClientRect();
-    setAddWeightPosition({
-      x: rect.x + 0.1 * rect.width,
-      y: rect.y + 0.7 * rect.height,
-      width: 0.8 * rect.width,
-    });
-    setAddWeightDate(info.date);
-    setWeightAdded(false);
+    if (!info.dayEl.children[0].innerText.includes('kg')) {
+      setShowAddWeight(true);
+      const rect = info.dayEl.getBoundingClientRect();
+      setAddWeightPosition({
+        x: rect.x + 0.1 * rect.width,
+        y: rect.y + 0.7 * rect.height,
+        width: 0.8 * rect.width,
+      });
+      setAddWeightDate(info.date);
+      setWeightAdded(false);
+    }
   };
 
   if (loading) return <Spinner />;
 
   return (
-    <>
+    <div className="flex flex-col">
       <div
         onClick={() =>
           dispatch({
             type: 'CLEAR_PLANNED_WORKOUTS',
           })
         }
-        className="btn btn-secondary"
+        className="btn btn-secondary w-40 ml-auto"
       >
-        CLEAR PLANNED WORKOUTS
+        CLEAR CALENDAR
       </div>
 
       {showWorkoutModal && (
@@ -289,7 +287,7 @@ function Calendar() {
         eventMouseLeave={handleEventMouseLeave}
         dateClick={handleDateClick}
       />
-    </>
+    </div>
   );
 }
 

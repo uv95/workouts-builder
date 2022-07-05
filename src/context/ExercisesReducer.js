@@ -18,6 +18,7 @@ const exercisesReducer = (state, action) => {
         weight: action.payload.weight,
         plannedWorkouts: action.payload.plannedWorkouts,
         //used in ExerciseItem page to keep favorite property updated after reloading
+        //ERROR (searchResults is undefined/null)
         searchResults: action.payload.searchResults.map((ex) =>
           state.favorites.some((ex1) => ex1.name === ex.name)
             ? { ...ex, favorite: true }

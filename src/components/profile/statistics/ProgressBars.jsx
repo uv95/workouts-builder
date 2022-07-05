@@ -9,91 +9,88 @@ function ProgressBars({ type, months, completedWorkouts }) {
   const [maxLastAddedWeight, setMaxLastAddedWeight] = useState(0);
 
   useEffect(() => {
-    if (completedWorkouts.length !== 0) {
-      // SET PROGRESS BAR LENGTH:
-      // 1) get all workouts for a certain period of time
-      const workoutsIn3Months = [
-        ...completedWorkouts.filter((w) => w.month === months[0]),
-        ...completedWorkouts.filter((w) =>
-          months.slice(-2).some((m) => m === w.month)
-        ),
-      ];
-      const workoutsIn6Months = [
-        ...completedWorkouts.filter((w) => w.month === months[0]),
-        ...completedWorkouts.filter((w) =>
-          months.slice(-5).some((m) => m === w.month)
-        ),
-      ];
+    // SET PROGRESS BAR LENGTH:
+    // 1) get all workouts for a certain period of time
+    const workoutsIn3Months = [
+      ...completedWorkouts.filter((w) => w.month === months[0]),
+      ...completedWorkouts.filter((w) =>
+        months.slice(-2).some((m) => m === w.month)
+      ),
+    ];
+    const workoutsIn6Months = [
+      ...completedWorkouts.filter((w) => w.month === months[0]),
+      ...completedWorkouts.filter((w) =>
+        months.slice(-5).some((m) => m === w.month)
+      ),
+    ];
 
-      // 2) function to get most repeated element in array
-      function getMostFrequent(arr) {
-        const hashmap = arr.reduce((acc, val) => {
-          acc[val] = (acc[val] || 0) + 1;
-          return acc;
-        }, {});
-        return Object.keys(hashmap).reduce((a, b) =>
-          hashmap[a] > hashmap[b] ? a : b
-        );
-      }
+    // 2) function to get most repeated element in array
+    const getMostFrequent = (arr) => {
+      const hashmap = arr.reduce((acc, val) => {
+        acc[val] = (acc[val] || 0) + 1;
+        return acc;
+      }, {});
+      return Object.keys(hashmap).reduce((a, b) =>
+        hashmap[a] > hashmap[b] ? a : b
+      );
+    };
+    // 3) get month with most workouts in a certain period of time
 
-      // 3) get month with most workouts in a certain period of time
+    const maxWorkoutsIn3Months = workoutsIn3Months.filter(
+      (w) =>
+        new Date(w.start).getMonth() ===
+        +getMostFrequent(
+          workoutsIn3Months.slice().map((w) => new Date(w.start).getMonth())
+        )
+    ).length;
+    const maxWorkoutsIn6Months = workoutsIn6Months.filter(
+      (w) =>
+        new Date(w.start).getMonth() ===
+        +getMostFrequent(
+          workoutsIn6Months.slice().map((w) => new Date(w.start).getMonth())
+        )
+    ).length;
+    const maxWorkoutsInYear = completedWorkouts.filter(
+      (w) =>
+        new Date(w.start).getMonth() ===
+        +getMostFrequent(
+          completedWorkouts.slice().map((w) => new Date(w.start).getMonth())
+        )
+    ).length;
 
-      const maxWorkoutsIn3Months = workoutsIn3Months.filter(
-        (w) =>
-          new Date(w.start).getMonth() ===
-          +getMostFrequent(
-            workoutsIn3Months.slice().map((w) => new Date(w.start).getMonth())
+    // 4) function to get max last added weight in certain period of time
+    const getMaxAddedWeight = (months) => {
+      return Math.max(
+        ...months
+          .slice()
+          .map(
+            (m) =>
+              weight
+                .filter((w) => w.month === m)
+                .sort(
+                  (a, b) =>
+                    new Date(b.start).getDate() - new Date(a.start).getDate()
+                )[0]?.number || 0
           )
-      ).length;
-      const maxWorkoutsIn6Months = workoutsIn6Months.filter(
-        (w) =>
-          new Date(w.start).getMonth() ===
-          +getMostFrequent(
-            workoutsIn6Months.slice().map((w) => new Date(w.start).getMonth())
-          )
-      ).length;
-      const maxWorkoutsInYear = completedWorkouts.filter(
-        (w) =>
-          new Date(w.start).getMonth() ===
-          +getMostFrequent(
-            completedWorkouts.slice().map((w) => new Date(w.start).getMonth())
-          )
-      ).length;
+      );
+    };
 
-      // 4) function to get max last added weight in certain period of time
-      const getMaxAddedWeight = (months) => {
-        return Math.max(
-          ...months
-            .slice()
-            .map(
-              (m) =>
-                weight
-                  .filter((w) => w.month === m)
-                  .sort(
-                    (a, b) =>
-                      new Date(b.start).getDate() - new Date(a.start).getDate()
-                  )[0]?.number || 0
-            )
-        );
-      };
-
-      // 5) set max values to define the progress bar length
-      if (period[type.toLowerCase()].number === 3) {
-        setMaxCompletedWorkouts(maxWorkoutsIn3Months);
-        setMaxLastAddedWeight(
-          getMaxAddedWeight([months[0], ...months.slice(-2)])
-        );
-      }
-      if (period[type.toLowerCase()].number === 6) {
-        setMaxCompletedWorkouts(maxWorkoutsIn6Months);
-        setMaxLastAddedWeight(
-          getMaxAddedWeight([months[0], ...months.slice(-5)])
-        );
-      }
-      if (period[type.toLowerCase()].number === 12) {
-        setMaxCompletedWorkouts(maxWorkoutsInYear);
-        setMaxLastAddedWeight(getMaxAddedWeight(months));
-      }
+    // 5) set max values to define the progress bar length
+    if (period[type.toLowerCase()].number === 3) {
+      setMaxCompletedWorkouts(maxWorkoutsIn3Months);
+      setMaxLastAddedWeight(
+        getMaxAddedWeight([months[0], ...months.slice(-2)])
+      );
+    }
+    if (period[type.toLowerCase()].number === 6) {
+      setMaxCompletedWorkouts(maxWorkoutsIn6Months);
+      setMaxLastAddedWeight(
+        getMaxAddedWeight([months[0], ...months.slice(-5)])
+      );
+    }
+    if (period[type.toLowerCase()].number === 12) {
+      setMaxCompletedWorkouts(maxWorkoutsInYear);
+      setMaxLastAddedWeight(getMaxAddedWeight(months));
     }
 
     ////////////////////

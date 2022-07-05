@@ -23,7 +23,7 @@ function ProfileWrapper({ children }) {
     dispatch({
       type: 'RESTORE_DATA',
       payload: {
-        searchResults: JSON.parse(localStorage.getItem('search results')),
+        searchResults: JSON.parse(localStorage.getItem('search results')) || [],
         favorites: JSON.parse(localStorage.getItem('favorites')),
         workouts: JSON.parse(localStorage.getItem('workouts')),
         plannedWorkouts: JSON.parse(localStorage.getItem('planned workouts')),
@@ -87,18 +87,6 @@ function ProfileWrapper({ children }) {
             }`}
           >
             Statistics
-          </p>
-        </Link>
-        <Link
-          className="flex m-5 pb-2 sm:text-xl md:text-5 pb-2xl border-b lg:text-2xl border-b"
-          to="measurements"
-        >
-          <p
-            className={`ml-5 ${
-              location.pathname.endsWith('/measurements') && 'font-bold'
-            }`}
-          >
-            Measurements
           </p>
         </Link>
         <Link

@@ -7,6 +7,7 @@ import { ReactComponent as EditIcon } from '../../../assets/svg/editIcon.svg';
 import Alert from '../../Alert';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useUpdateData } from '../../../hooks/useUpdateData.js';
+import { Link } from 'react-router-dom';
 
 function MyWorkouts() {
   const { workouts, plannedWorkouts, dispatch } = useContext(ExercisesContext);
@@ -74,13 +75,13 @@ function MyWorkouts() {
       {!workouts || workouts.length === 0 ? (
         <div className="flex justify-between mt-1">
           <p className="text-2xl ">No workouts yet!</p>
-          <div
+          <Link
             to="/exercises"
             className="mr-20 text-lg flex items-center gap-2"
           >
             <p className="text-3xl text-primary mb-1">+</p>
             <p>New workout</p>
-          </div>
+          </Link>
         </div>
       ) : (
         <>

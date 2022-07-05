@@ -21,6 +21,7 @@ function AddWeight({ position, date, setWeightAdded, weightAdded, source }) {
       dispatch({ type: 'SET_WEIGHT', payload: weightEvent });
     setWeightAdded(true);
   };
+
   const onChange = (e) => {
     setWeightEvent({
       start: date,
