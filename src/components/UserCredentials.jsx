@@ -1,24 +1,17 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { ReactComponent as VisibilityIcon } from '../assets/svg/visibilityIcon.svg';
-import Alert from '../components/Alert';
 import { ReactComponent as LockIcon } from '../assets/svg/lockIcon.svg';
 import { ReactComponent as Email } from '../assets/svg/email.svg';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase.config';
+import { ReactComponent as VisibilityIcon } from '../assets/svg/visibilityIcon.svg';
 
-function SignIn() {
+function UserCredentials({ setShowUserCredentials }) {
   const [showPassword, setShowPassword] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
 
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const { email, password } = formData;
-
-  const navigate = useNavigate();
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -38,45 +31,19 @@ function SignIn() {
         email,
         password
       );
-
-      // set the current user's favorites and workouts to local storage
-      const userRef = doc(db, 'users', auth.currentUser.uid);
-      const userSnap = await getDoc(userRef);
-      if (userSnap.exists())
-        localStorage.setItem(
-          'favorites',
-          JSON.stringify(userSnap.data().favorites)
-        );
-      localStorage.setItem(
-        'workouts',
-        JSON.stringify(userSnap.data().workouts)
-      );
-      localStorage.setItem(
-        'planned workouts',
-        JSON.stringify(userSnap.data().plannedWorkouts)
-      );
-      localStorage.setItem('weight', JSON.stringify(userSnap.data().weight));
-
-      if (userCredential.user) navigate('/profile/myworkouts');
+      if (userCredential.user) setShowUserCredentials(false);
     } catch (error) {
-      setShowAlert(true);
-      setTimeout(() => {
-        setShowAlert(false);
-      }, 3000);
+      console.log(error);
     }
   };
 
   return (
-    <>
-      {showAlert && (
-        <Alert
-          type="error"
-          text="Wrong email or password."
-          position="absolute top-24"
-          icon="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      )}
-      <form onSubmit={onSubmit} className="mt-36 form-control w-80 text-lg ">
+    <div className="newWorkoutBackground w-full h-full bg-black/30 fixed top-0 left-0 flex justify-center items-center z-10">
+      <form
+        onSubmit={onSubmit}
+        className="mt-36 form-control w-80 text-lg bg-white rounded-box p-4"
+      >
+        <p className="mx-auto mb-4">Please sign in again</p>
         <label className="input-group mb-5">
           <span className="w-16 bg-primary flex justify-center">
             <Email fill="#fff" width="20px" height="29px" />
@@ -90,7 +57,7 @@ function SignIn() {
             onChange={onChange}
           />
         </label>
-        <label className="input-group mb-2">
+        <label className="input-group mb-4">
           <span className="w-16 bg-primary flex justify-center">
             <LockIcon fill="#fff" width="24px" />
           </span>
@@ -111,19 +78,13 @@ function SignIn() {
             />
           </div>
         </label>
-        <Link to="/forgot-password" className="text-sm mb-3">
-          Forgot password?
-        </Link>
-        <button className="btn btn-primary w-40 mx-auto mb-5">Sign in</button>
-        <p className="mx-auto text-base-300">
-          Don't have an account yet?{' '}
-          <Link to="/sign-up" className="link link-primary font-bold">
-            Sign up.
-          </Link>
-        </p>
+        <button type="submit" className="btn btn-accent w-40 mx-auto mb-1">
+          Sign in
+        </button>
       </form>
-    </>
+      //{' '}
+    </div>
   );
 }
 
-export default SignIn;
+export default UserCredentials;
