@@ -6,6 +6,7 @@ function Pagination({
   totalExercises,
   paginate,
   currentPage,
+  sourcePage,
 }) {
   const pageNumbers = [];
 
@@ -13,13 +14,17 @@ function Pagination({
     pageNumbers.push(i);
   }
   return (
-    <div className="btn-group mt-auto mx-auto">
+    <div className="btn-group mt-auto mx-auto ">
       {pageNumbers.map((number) => (
         <Link
           className={currentPage === number ? 'btn btn-active' : 'btn'}
           key={number}
           onClick={() => paginate(number)}
-          to="/exercises/selected"
+          to={
+            sourcePage === 'searchResults'
+              ? '/exercises/selected'
+              : '/profile/favorites'
+          }
         >
           {number}
         </Link>

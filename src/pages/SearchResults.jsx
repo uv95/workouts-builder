@@ -70,6 +70,7 @@ function SearchResults() {
           totalExercises={searchResults.length}
           paginate={paginate}
           currentPage={currentPage}
+          sourcePage="searchResults"
         />
       </>
     );
