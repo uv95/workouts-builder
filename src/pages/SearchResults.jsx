@@ -35,13 +35,12 @@ function SearchResults() {
       chosenExercises.muscles,
       chosenExercises.equipment
     );
-
-    searchResults.length > 0 && setLoading(false);
   }, [searchResults.length]);
 
   // to avoid problems opening unique exercises
   useEffect(() => {
     localStorage.setItem('search results', JSON.stringify(searchResults));
+    setLoading(false);
   }, [searchResults]);
 
   useEffect(() => {
@@ -61,8 +60,8 @@ function SearchResults() {
         {showNewWorkout && <NewWorkout />}
 
         <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-4 sm:grid-cols-2 gap-20 gap-y-10">
-          {currentExercises.map((ex, index) => {
-            return <ExerciseCard ex={ex} key={index} />;
+          {currentExercises.map((ex) => {
+            return <ExerciseCard ex={ex} key={ex.id} />;
           })}
         </div>
         <Pagination

@@ -5,7 +5,6 @@ import UpcomingWorkout from './UpcomingWorkout';
 import { ReactComponent as DeleteIcon } from '../../../assets/svg/deleteIcon.svg';
 import { ReactComponent as EditIcon } from '../../../assets/svg/editIcon.svg';
 import Alert from '../../Alert';
-import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useUpdateData } from '../../../hooks/useUpdateData.js';
 import { Link } from 'react-router-dom';
 
@@ -16,7 +15,6 @@ function MyWorkouts() {
   const [editWorkout, setEditWorkout] = useState(false);
   const [workoutId, setWorkoutId] = useState('');
 
-  const { loggedIn } = useAuthStatus();
   const { updateWorkouts, updatePlannedWorkouts } = useUpdateData();
 
   const onDelete = (workout) => {
@@ -34,10 +32,10 @@ function MyWorkouts() {
 
   useEffect(() => {
     updateWorkouts();
-  }, [workouts, loggedIn]);
+  }, [workouts]);
   useEffect(() => {
     updatePlannedWorkouts();
-  }, [plannedWorkouts, loggedIn]);
+  }, [plannedWorkouts]);
 
   const onEdit = (workout) => {
     setWorkoutId(workout?.id);

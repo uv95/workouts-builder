@@ -1,5 +1,6 @@
 import { createContext, useReducer, useRef } from 'react';
 import exercisesReducer from './ExercisesReducer';
+import { v4 as uuid } from 'uuid';
 
 const ExercisesContext = createContext();
 
@@ -83,6 +84,7 @@ export const ExercisesProvider = ({ children }) => {
               let [exercise] = data[bp][mus][eq];
               //determine muscles and equipment to show on each exercise's card
               if (exercise) {
+                exercise.id = uuid();
                 exercise.muscleGroup = `${bp[0].toUpperCase()}${bp.slice(1)}`;
                 exercise.muscle = `${mus[0].toUpperCase()}${mus.slice(1)}`;
                 exercise.equipment = `${eq[0].toUpperCase()}${eq
@@ -94,17 +96,6 @@ export const ExercisesProvider = ({ children }) => {
             }
           });
         });
-      });
-
-      dispatch({
-        type: 'RESTORE_DATA',
-        payload: {
-          searchResults: JSON.parse(localStorage.getItem('search results')),
-          favorites: JSON.parse(localStorage.getItem('favorites')),
-          workouts: JSON.parse(localStorage.getItem('workouts')),
-          plannedWorkouts: JSON.parse(localStorage.getItem('planned workouts')),
-          weight: JSON.parse(localStorage.getItem('weight')),
-        },
       });
 
       // if there are already exercises marked as favorite (in localStorage) -> they should be displayed as favorite in new search results

@@ -48,10 +48,10 @@ function ExerciseItem() {
 
   useEffect(() => {
     updateFavorites();
-  }, [loggedIn, favorites]);
+  }, [favorites]);
   useEffect(() => {
     updateWorkouts();
-  }, [loggedIn, workouts]);
+  }, [workouts]);
 
   const getCurrentWorkout = () => {
     const workouts = JSON.parse(localStorage.getItem('workouts'));

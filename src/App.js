@@ -23,7 +23,7 @@ function App() {
         <Router>
           <div className="relative">
             <Navbar />
-            <main className="container mx-auto flex flex-col items-center gap-6 min-h-screen pb-32">
+            <main className="container mx-auto flex flex-col items-center min-h-screen">
               <Routes>
                 <Route path="/" element={<Hero />} />
                 <Route path="/exercises" element={<Exercises />} />
