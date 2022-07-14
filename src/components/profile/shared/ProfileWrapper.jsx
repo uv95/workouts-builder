@@ -24,10 +24,11 @@ function ProfileWrapper({ children }) {
       type: 'RESTORE_DATA',
       payload: {
         searchResults: JSON.parse(localStorage.getItem('search results')) || [],
-        favorites: JSON.parse(localStorage.getItem('favorites')),
-        workouts: JSON.parse(localStorage.getItem('workouts')),
-        plannedWorkouts: JSON.parse(localStorage.getItem('planned workouts')),
-        weight: JSON.parse(localStorage.getItem('weight')),
+        favorites: JSON.parse(localStorage.getItem('favorites')) || [],
+        workouts: JSON.parse(localStorage.getItem('workouts')) || [],
+        plannedWorkouts:
+          JSON.parse(localStorage.getItem('planned workouts')) || [],
+        weight: JSON.parse(localStorage.getItem('weight')) || [],
       },
     });
   }, []);

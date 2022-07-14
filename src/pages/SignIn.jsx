@@ -42,20 +42,21 @@ function SignIn() {
       // set the current user's favorites and workouts to local storage
       const userRef = doc(db, 'users', auth.currentUser.uid);
       const userSnap = await getDoc(userRef);
-      if (userSnap.exists())
+      if (userSnap.exists()) {
         localStorage.setItem(
           'favorites',
           JSON.stringify(userSnap.data().favorites)
         );
-      localStorage.setItem(
-        'workouts',
-        JSON.stringify(userSnap.data().workouts)
-      );
-      localStorage.setItem(
-        'planned workouts',
-        JSON.stringify(userSnap.data().plannedWorkouts)
-      );
-      localStorage.setItem('weight', JSON.stringify(userSnap.data().weight));
+        localStorage.setItem(
+          'workouts',
+          JSON.stringify(userSnap.data().workouts)
+        );
+        localStorage.setItem(
+          'planned workouts',
+          JSON.stringify(userSnap.data().plannedWorkouts)
+        );
+        localStorage.setItem('weight', JSON.stringify(userSnap.data().weight));
+      }
 
       if (userCredential.user) navigate('/profile/myworkouts');
     } catch (error) {

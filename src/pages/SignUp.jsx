@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Alert from '../components/Alert';
+import GoogleAuth from '../components/GoogleAuth';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -8,7 +9,6 @@ import {
 } from 'firebase/auth';
 import { ReactComponent as VisibilityIcon } from '../assets/svg/visibilityIcon.svg';
 import { ReactComponent as PersonIcon } from '../assets/svg/personIcon.svg';
-import { ReactComponent as GoogleIcon } from '../assets/svg/googleIcon.svg';
 import { ReactComponent as LockIcon } from '../assets/svg/lockIcon.svg';
 import { ReactComponent as Email } from '../assets/svg/email.svg';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
@@ -63,20 +63,24 @@ function SignUp() {
       try {
         const userRef = doc(db, 'users', auth.currentUser.uid);
         const userSnap = await getDoc(userRef);
-        if (userSnap.exists())
+        if (userSnap.exists()) {
           localStorage.setItem(
             'favorites',
             JSON.stringify(userSnap.data().favorites)
           );
-        localStorage.setItem(
-          'workouts',
-          JSON.stringify(userSnap.data().workouts)
-        );
-        localStorage.setItem(
-          'planned workouts',
-          JSON.stringify(userSnap.data().plannedWorkouts)
-        );
-        localStorage.setItem('weight', JSON.stringify(userSnap.data().weight));
+          localStorage.setItem(
+            'workouts',
+            JSON.stringify(userSnap.data().workouts)
+          );
+          localStorage.setItem(
+            'planned workouts',
+            JSON.stringify(userSnap.data().plannedWorkouts)
+          );
+          localStorage.setItem(
+            'weight',
+            JSON.stringify(userSnap.data().weight)
+          );
+        }
       } catch (error) {
         console.log(error);
       }
@@ -150,7 +154,7 @@ function SignUp() {
         </label>
         <button className="btn btn-primary w-40 mx-auto mb-5">Sign up</button>
         <p className="mx-auto mb-2 text-neutral">Or sign up with</p>
-        <GoogleIcon className="mx-auto w-12 h-12 mb-5" />
+        <GoogleAuth setShowAlert={setShowAlert} />
         <p className="mx-auto text-base-300">
           Already have an account?{' '}
           <Link to="/sign-in" className="link link-primary font-bold">
