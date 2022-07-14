@@ -3,7 +3,11 @@ import React from 'react';
 function Alert({ text, type, position, icon }) {
   return (
     <div
-      className={`alert alert-${type} shadow-lg text-xs w-64 h-8 ${position}`}
+      style={{
+        backgroundColor:
+          type === 'error' ? 'rgb(248, 114, 114)' : 'rgb(54, 211, 153)',
+      }}
+      className={`alert shadow-lg text-xs w-64 h-8 ${position}`}
     >
       <div>
         <svg
