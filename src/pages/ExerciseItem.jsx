@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import ExercisesContext from '../context/ExercisesContext';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useLocation, useParams } from 'react-router-dom';
@@ -44,7 +44,7 @@ function ExerciseItem() {
     });
     //doesn't work. WHY?
     setLoading(false);
-  }, [loggedIn]);
+  }, [dispatch, params.exercise, loggedIn]);
 
   useEffect(() => {
     updateFavorites();
@@ -53,7 +53,7 @@ function ExerciseItem() {
     updateWorkouts();
   }, [workouts]);
 
-  const getCurrentWorkout = () => {
+  const getCurrentWorkout = useCallback(() => {
     const workouts = JSON.parse(localStorage.getItem('workouts'));
     const currentWorkout = workouts.find(
       (workout) =>
@@ -61,15 +61,15 @@ function ExerciseItem() {
         location.pathname.split('/').slice(-2, -1).join('')
     );
     return currentWorkout;
-  };
+  }, [location.pathname]);
 
   // helps find where we get the exercise from (SearchResults page, Favorites or WorkoutItem)
-  const getExerciseArray = () => {
+  const getExerciseArray = useCallback(() => {
     if (location.pathname.startsWith('/exercises')) return searchResults;
     if (location.pathname.startsWith('/profile/favorites')) return favorites;
     if (location.pathname.startsWith('/profile/myworkouts'))
       return getCurrentWorkout().exercises;
-  };
+  }, [getCurrentWorkout, location.pathname, searchResults, favorites]);
 
   if (loading) return <Spinner />;
 
@@ -98,7 +98,7 @@ function ExerciseItem() {
         {getExerciseArray().map((ex, i) => {
           if (ex.name.replaceAll(' ', '_').toLowerCase() === params.exercise) {
             return (
-              <div key={i} className="flex gap-16 mx-10">
+              <div key={ex.id} className="flex gap-16 mx-10">
                 <img
                   className="w-2/5 h-fit rounded-lg"
                   src={ex.image}
@@ -108,7 +108,7 @@ function ExerciseItem() {
                 <div>
                   <div className="flex justify-between">
                     <h2 className="font-bold text-3xl mb-6">{ex.name}</h2>
-                    {!getCurrentWorkout() && loggedIn && (
+                    {loggedIn && (
                       <div className="flex justify-center gap-5 mr-5 mt-1">
                         <div
                           onClick={() => {

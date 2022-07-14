@@ -35,12 +35,12 @@ function SearchResults() {
       chosenExercises.muscles,
       chosenExercises.equipment
     );
+    setLoading(false);
   }, [searchResults.length]);
 
   // to avoid problems opening unique exercises
   useEffect(() => {
     localStorage.setItem('search results', JSON.stringify(searchResults));
-    setLoading(false);
   }, [searchResults]);
 
   useEffect(() => {

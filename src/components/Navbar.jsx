@@ -9,7 +9,7 @@ function Navbar() {
   const { loggedIn } = useAuthStatus();
 
   return (
-    <nav className="border-gray-200 bg-base-100 border-b px-10 absolute w-full h-20 flex justify-between items-center">
+    <nav className="border-gray-200 bg-base-100 border-b px-10 absolute w-full h-20 flex justify-between items-center z-10">
       <Link
         to="/"
         className="cursor-pointer font-bold text-3xl flex items-center gap-3"

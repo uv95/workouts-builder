@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext, useCallback } from 'react';
 import { useAuthStatus } from './useAuthStatus.js';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import ExercisesContext from '../context/ExercisesContext';
@@ -13,7 +13,7 @@ export const useUpdateData = () => {
   const auth = getAuth();
   const userRef = loggedIn ? doc(db, 'users', auth.currentUser.uid) : null;
 
-  const updateFavorites = () => {
+  const updateFavorites = useCallback(() => {
     if (loggedIn && favorites !== null) {
       localStorage.setItem('favorites', JSON.stringify(favorites));
 
@@ -28,9 +28,9 @@ export const useUpdateData = () => {
       };
       update();
     }
-  };
+  }, [loggedIn, favorites]);
 
-  const updateWorkouts = () => {
+  const updateWorkouts = useCallback(() => {
     if (loggedIn && workouts !== null) {
       localStorage.setItem('workouts', JSON.stringify(workouts));
 
@@ -45,8 +45,9 @@ export const useUpdateData = () => {
       };
       update();
     }
-  };
-  const updatePlannedWorkouts = () => {
+  }, [loggedIn, workouts]);
+
+  const updatePlannedWorkouts = useCallback(() => {
     if (loggedIn && plannedWorkouts !== null) {
       localStorage.setItem('planned workouts', JSON.stringify(plannedWorkouts));
 
@@ -61,8 +62,9 @@ export const useUpdateData = () => {
       };
       update();
     }
-  };
-  const updateWeight = () => {
+  }, [loggedIn, plannedWorkouts]);
+
+  const updateWeight = useCallback(() => {
     if (loggedIn && weight !== null) {
       localStorage.setItem('weight', JSON.stringify(weight));
 
@@ -77,7 +79,7 @@ export const useUpdateData = () => {
       };
       update();
     }
-  };
+  }, [loggedIn, weight]);
 
   return {
     updateFavorites,

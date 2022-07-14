@@ -106,7 +106,7 @@ export const ExercisesProvider = ({ children }) => {
           return latestFavorites.current.some((ex1) => ex1.name === ex.name)
             ? { ...ex, favorite: true }
             : ex;
-        if (!latestFavorites.current) return exercisesList;
+        if (!latestFavorites.current) return ex;
       });
 
       dispatch({ type: 'SHOW_EXERCISES', payload: exercisesListWithFavorites });
